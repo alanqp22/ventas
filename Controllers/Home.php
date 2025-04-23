@@ -3,8 +3,7 @@ class Home extends Controller
 {
   public function index($parametros = "")
   {
-    echo "hola mundo cruel";
-    //require_once 'Views/Home/index.php';
+    $this->views->getView($this, "index");
   }
 
   public function error()

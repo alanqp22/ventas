@@ -14,10 +14,6 @@ if (!empty($array[2])) {
   }
 }
 
-// print_r($controller . '<br>');
-// print_r($metodo . '<br>');
-// print_r($parametros . '<br>');
-
 require_once 'Config/App/autoload.php';
 $dirController = "Controllers/" . $controller . ".php";
 if (file_exists($dirController)) {
