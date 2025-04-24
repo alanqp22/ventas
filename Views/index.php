@@ -1,16 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenido</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>SVFE</title>
+    <link href="<?= base_url ?>Assets/css/styles.css" rel="stylesheet" />
+    <script src="<?= base_url ?>Assets/js/all.js" crossorigin="anonymous"></script>
 </head>
 
-<body>
-    <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod ipsa a corrupti ratione voluptatum enim veniam dolore nesciunt dolores pariatur facere expedita maxime dicta voluptate cum culpa, nisi iure! Quod?
-    </p>
+<body class="bg-primary">
+    <div id="layoutAuthentication">
+        <div id="layoutAuthentication_content">
+            <main>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5">
+                            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                <div class="card-header">
+                                    <h3 class="text-center font-weight-light my-4">Iniciar sesión</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="nick" name="nick" type="text" placeholder="Nombre de Usuario" />
+                                            <label for="nick"><i class="fa-regular fa-user"></i>Usuario</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="clave" name="clave" type="password" placeholder="Contraseña" />
+                                            <label for="clave">Contraseña</label>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                                            <a class="btn btn-primary" href="index.html">Login</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <div id="layoutAuthentication_footer">
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; www.alden.web.app <?= date('Y') ?></div>
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="<?= base_url ?>Assetst/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="<?= base_url ?>Assets/js/scripts.js"></script>
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 <?php
-const base_url = 'http://localhost/svfe/';
+const base_url = 'http://localhost/ventas/';
 const host = 'localhost';
 const user = 'root';
 const pass = '';
