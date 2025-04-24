@@ -9,7 +9,7 @@
     <meta name="author" content="" />
     <title>SVFE</title>
     <link href="<?= base_url ?>Assets/css/styles.css" rel="stylesheet" />
-    <script src="<?= base_url ?>Assets/js/all.js" crossorigin="anonymous"></script>
+    <script src="<?= base_url ?>Assets/js/fontawesome.all.js" crossorigin="anonymous"></script>
 </head>
 
 <body class="bg-primary">
@@ -27,14 +27,14 @@
                                     <form>
                                         <div class="form-floating mb-3">
                                             <input class="form-control" id="nick" name="nick" type="text" placeholder="Nombre de Usuario" />
-                                            <label for="nick"><i class="fa-regular fa-user"></i>Usuario</label>
+                                            <label for="nick"><i class="fas fa-user"></i> Usuario</label>
                                         </div>
                                         <div class="form-floating mb-3">
                                             <input class="form-control" id="clave" name="clave" type="password" placeholder="Contraseña" />
-                                            <label for="clave">Contraseña</label>
+                                            <label for="clave"> <i class="fas fa-key"></i> Contraseña</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                            <a class="btn btn-primary" href="index.html">Login</a>
+                                            <a class="btn btn-primary" href="index.html">Ingresar</a>
                                         </div>
                                     </form>
                                 </div>
@@ -59,7 +59,7 @@
             </footer>
         </div>
     </div>
-    <script src="<?= base_url ?>Assetst/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="<?= base_url ?>Assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="<?= base_url ?>Assets/js/scripts.js"></script>
 </body>
 
