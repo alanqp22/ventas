@@ -24,7 +24,7 @@
                                     <h3 class="text-center font-weight-light my-4">Iniciar sesión</h3>
                                 </div>
                                 <div class="card-body">
-                                    <form>
+                                    <form id="frmLogin">
                                         <div class="form-floating mb-3">
                                             <input class="form-control" id="nick" name="nick" type="text" placeholder="Nombre de Usuario" />
                                             <label for="nick"><i class="fas fa-user"></i> Usuario</label>
@@ -34,7 +34,7 @@
                                             <label for="clave"> <i class="fas fa-key"></i> Contraseña</label>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                            <a class="btn btn-primary" href="index.html">Ingresar</a>
+                                            <button onclick="frmLogin(event);" class="btn btn-primary" type="submit">Ingresar</button>
                                         </div>
                                     </form>
                                 </div>
@@ -61,6 +61,8 @@
     </div>
     <script src="<?= base_url ?>Assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="<?= base_url ?>Assets/js/scripts.js"></script>
+    <script src="<?= base_url ?>Assets/js/funciones.js"></script>
+
 </body>
 
 </html>

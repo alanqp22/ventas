@@ -21,6 +21,7 @@
 <script src="<?= base_url ?>Assets/demo/chart-bar-demo.js"></script>
 <script src="<?= base_url ?>Assets/js/simple-datatables.min.js" crossorigin="anonymous"></script>
 <script src="<?= base_url ?>Assets/js/datatables-simple-demo.js"></script>
+<script src="<?= base_url ?>Assets/js/funciones.js"></script>
 </body>
 
 </html>
