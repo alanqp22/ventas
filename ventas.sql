@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-04-2025 a las 02:35:02
+-- Tiempo de generación: 25-04-2025 a las 17:20:44
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -29,9 +29,16 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `caja` (
   `id_caja` int(11) NOT NULL,
-  `caja` int(11) NOT NULL,
+  `caja` varchar(25) NOT NULL,
   `caja_estado` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `caja`
+--
+
+INSERT INTO `caja` (`id_caja`, `caja`, `caja_estado`) VALUES
+(1, 'caja 1', 1);
 
 -- --------------------------------------------------------
 
@@ -42,10 +49,18 @@ CREATE TABLE `caja` (
 CREATE TABLE `usuarios` (
   `id_usuario` int(11) NOT NULL,
   `nick` varchar(20) NOT NULL,
+  `nombre` varchar(50) NOT NULL,
   `clave` varchar(255) NOT NULL,
   `id_caja` int(11) NOT NULL,
   `usuario_estado` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`id_usuario`, `nick`, `nombre`, `clave`, `id_caja`, `usuario_estado`) VALUES
+(1, 'alden', 'Alan Quispe', '123456', 1, 1);
 
 --
 -- Índices para tablas volcadas
@@ -72,13 +87,13 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `caja`
 --
 ALTER TABLE `caja`
-  MODIFY `id_caja` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_caja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas

@@ -16,4 +16,13 @@ class Query extends Conexion
         $data = $result->fetch(PDO::FETCH_ASSOC);
         return $data;
     }
+
+    public function selectAll(string $sql)
+    {
+        $this->sql = $sql;
+        $result = $this->con->prepare($this->sql);
+        $result->execute();
+        $data = $result->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
 }

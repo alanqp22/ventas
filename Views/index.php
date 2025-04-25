@@ -33,7 +33,10 @@
                                             <input class="form-control" id="clave" name="clave" type="password" placeholder="Contraseña" />
                                             <label for="clave"> <i class="fas fa-key"></i> Contraseña</label>
                                         </div>
+                                        <div id="alert" class="alert alert-danger d-none" role="alert">
+                                        </div>
                                         <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+
                                             <button onclick="frmLogin(event);" class="btn btn-primary" type="submit">Ingresar</button>
                                         </div>
                                     </form>
@@ -61,6 +64,9 @@
     </div>
     <script src="<?= base_url ?>Assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="<?= base_url ?>Assets/js/scripts.js"></script>
+    <script>
+        const base_url = "<?= base_url ?>";
+    </script>
     <script src="<?= base_url ?>Assets/js/funciones.js"></script>
 
 </body>
