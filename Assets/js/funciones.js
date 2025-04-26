@@ -14,6 +14,8 @@ $(document).ready(function () {
       { data: "nick" },
       { data: "nombre" },
       { data: "caja" },
+      { data: "estado" },
+      { data: "acciones" },
     ],
   });
 });
@@ -49,4 +51,19 @@ function frmLogin(e) {
       }
     };
   }
+}
+
+
+function btnEditUser(id_user){
+  console.log(id_user);
+  
+}
+
+function btnDeleteUser(id_user){
+  console.log(id_user);
+}
+
+function btnRestoreUser(id_user){
+  console.log(id_user);
+  
 }

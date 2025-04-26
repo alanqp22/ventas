@@ -12,6 +12,8 @@ include "Views/Templates/header.php";
       <th>Usuario</th>
       <th>Nombre</th>
       <th>Caja</th>
+      <th>Estado</th>
+      <th>Acciones</th>
     </tr>
   </thead>
 </table>

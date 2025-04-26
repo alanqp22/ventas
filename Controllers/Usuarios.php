@@ -15,6 +15,17 @@ class Usuarios extends Controller
   public function listar()
   {
     $data = $this->model->getUsuarios();
+    for ($i = 0; $i < count($data); $i++) {
+      if ($data[$i]["usuario_estado"] == 1) {
+        $data[$i]["estado"] = '<span class="badge text-bg-primary">Activo</span>';
+        $data[$i]["acciones"] =
+          '<button class="btn btn-primary" type="button" onclick="btnEditUser(' . $data[$i]["id_usuario"] . ');"><i class="fas fa-edit"></i></button>
+        <button class="btn btn-danger" type="button" onclick="btnDeleteUser(' . $data[$i]["id_usuario"] . ');"><i class="fas fa-trash"></i></button>';
+      } else {
+        $data[$i]["estado"] = '<span class="badge text-bg-danger">Inactivo</span>';
+        $data[$i]["acciones"] = '<button class="btn btn-success" type="button" onclick="btnRestoreUser(' . $data[$i]["id_usuario"] . ');"><i class="fas fa-trash-can-arrow-up"></i></button>';
+      }
+    }
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
     die();
   }
