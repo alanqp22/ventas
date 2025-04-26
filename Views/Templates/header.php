@@ -8,9 +8,10 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Sys Ventas</title>
-    <link href="<?= base_url ?>Assets/datatables7.1.2.min.css" rel="stylesheet" />
+
     <link href="<?= base_url ?>Assets/css/styles.css" rel="stylesheet" />
-    <script src="<?= base_url ?>Assets/js/fontawesome.all.js" crossorigin="anonymous"></script>
+    <script src="<?= base_url ?>Assets/js/fontawesome.all.js"></script>
+    <link href="<?= base_url ?>Assets/datatables.min.css" rel="stylesheet" />
 </head>
 
 <body class="sb-nav-fixed">

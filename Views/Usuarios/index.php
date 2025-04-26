@@ -5,14 +5,13 @@ include "Views/Templates/header.php";
 <ol class="breadcrumb mb-4">
   <li class="breadcrumb-item active">usuario_estado</li>
 </ol>
-<table class="table table-light" id="tblUsuarios">
+<table class="table table-light display" id="tblUsuarios">
   <thead class="thead-dark">
     <tr>
       <th>Id</th>
       <th>Usuario</th>
       <th>Nombre</th>
       <th>Caja</th>
-      <th>Acciones</th>
     </tr>
   </thead>
 </table>

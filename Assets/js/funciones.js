@@ -1,3 +1,19 @@
+let tblUsuarios;
+document.addEventListener("DOMContentLoaded", function () {
+  $("#tblUsuarios").DataTable({
+    ajax: {
+      url: `${base_url}Usuarios/listar`,
+      dataSrc: "",
+    },
+    columns: [
+      { data: "id_usuario" },
+      { data: "nick" },
+      { data: "nombre" },
+      { data: "caja" },
+    ],
+  });
+});
+
 function frmLogin(e) {
   e.preventDefault();
   let nick = document.getElementById("nick");
@@ -13,21 +29,21 @@ function frmLogin(e) {
     clave.classList.remove("is-invalid");
     nick.classList.remove("is-invalid");
     const url = `${base_url}Usuarios/validar`;
-    const frm  = document.getElementById("frmLogin");
+    const frm = document.getElementById("frmLogin");
     const http = new XMLHttpRequest();
-    http.open("POST",url,true);    
+    http.open("POST", url, true);
     http.send(new FormData(frm));
-    http.onreadystatechange = function(){
-      if(this.readyState == 4 && this.status == 200){
+    http.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
         const res = JSON.parse(this.responseText);
-        if (res == "ok"){
+        if (res == "ok") {
           window.location = base_url + "Usuarios";
         } else {
           let alert = document.getElementById("alert");
-          alert.classList.remove('d-none');          
+          alert.classList.remove("d-none");
           alert.innerText = res;
         }
       }
-    }
+    };
   }
 }

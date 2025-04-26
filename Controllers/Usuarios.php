@@ -15,7 +15,8 @@ class Usuarios extends Controller
   public function listar()
   {
     $data = $this->model->getUsuarios();
-    print_r($data);
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    die();
   }
 
   public function validar()
