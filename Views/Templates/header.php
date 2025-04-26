@@ -10,8 +10,8 @@
     <title>Sys Ventas</title>
 
     <link href="<?= base_url ?>Assets/css/styles.css" rel="stylesheet" />
+    <link href="<?= base_url ?>Assets/css/datatables.min.css" rel="stylesheet" />
     <script src="<?= base_url ?>Assets/js/fontawesome.all.js"></script>
-    <link href="<?= base_url ?>Assets/datatables.min.css" rel="stylesheet" />
 </head>
 
 <body class="sb-nav-fixed">

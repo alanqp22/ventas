@@ -25,5 +25,8 @@ if (file_exists($dirController)) {
     echo "No existe el método";
   }
 } else {
-  echo "No existe el controlador";
+  // echo "No existe el controlador";
+  header("HTTP/1.1 404 Not Found");
+  echo "Recurso no encontrado";
+  exit;
 }

@@ -5,8 +5,8 @@ include "Views/Templates/header.php";
 <ol class="breadcrumb mb-4">
   <li class="breadcrumb-item active">usuario_estado</li>
 </ol>
-<table class="table table-light display" id="tblUsuarios">
-  <thead class="thead-dark">
+<table class="table" id="tblUsuarios">
+  <thead>
     <tr>
       <th>Id</th>
       <th>Usuario</th>

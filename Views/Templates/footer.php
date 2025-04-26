@@ -15,12 +15,12 @@
 </div>
 </div>
 <script src="<?= base_url ?>Assets/js/jquery-3.7.1.min.js"></script>
+<script src="<?= base_url ?>Assets/js/datatables.min.js"></script>
 <script src="<?= base_url ?>Assets/js/bootstrap.bundle.min.js"></script>
 <script src="<?= base_url ?>Assets/js/scripts.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
 <script src="<?= base_url ?>Assets/demo/chart-area-demo.js"></script>
 <script src="<?= base_url ?>Assets/demo/chart-bar-demo.js"></script> -->
-<script src="<?= base_url ?>Assets/js/datatables.min.js"></script>
 <!-- <script src="<?= base_url ?>Assets/js/datatables-simple-demo.js"></script> -->
 <script>
     const base_url = "<?= base_url ?>";

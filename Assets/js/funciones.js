@@ -1,5 +1,9 @@
 let tblUsuarios;
 document.addEventListener("DOMContentLoaded", function () {
+  
+});
+
+$(document).ready(function () {
   $("#tblUsuarios").DataTable({
     ajax: {
       url: `${base_url}Usuarios/listar`,
@@ -13,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
     ],
   });
 });
-
 function frmLogin(e) {
   e.preventDefault();
   let nick = document.getElementById("nick");
