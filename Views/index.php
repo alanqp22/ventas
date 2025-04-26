@@ -9,7 +9,7 @@
     <meta name="author" content="" />
     <title>SVFE</title>
     <link href="<?= base_url ?>Assets/css/styles.css" rel="stylesheet" />
-    <script src="<?= base_url ?>Assets/js/fontawesome.all.js" crossorigin="anonymous"></script>
+    <script src="<?= base_url ?>Assets/js/fontawesome.all.js"></script>
 </head>
 
 <body class="bg-primary">
@@ -62,7 +62,7 @@
             </footer>
         </div>
     </div>
-    <script src="<?= base_url ?>Assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="<?= base_url ?>Assets/js/bootstrap.bundle.min.js"></script>
     <script src="<?= base_url ?>Assets/js/scripts.js"></script>
     <script>
         const base_url = "<?= base_url ?>";

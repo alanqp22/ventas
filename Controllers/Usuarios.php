@@ -9,7 +9,8 @@ class Usuarios extends Controller
 
   public function index()
   {
-    $this->views->getView($this, "index");
+    $data['cajas'] = $this->model->getCajas();
+    $this->views->getView($this, "index", $data);
   }
 
   public function listar()
@@ -48,6 +49,48 @@ class Usuarios extends Controller
         $msg = "ok";
       } else {
         $msg = "Usuario o contraseña incorrecta";
+      }
+    }
+    echo json_encode($msg, JSON_UNESCAPED_UNICODE);
+  }
+
+  public function registrar()
+  {
+    if ($_SERVER['REQUEST_METHOD'] != "POST") {
+      echo json_encode(['error' => 'Método no permitido']);
+      die();
+    }
+    $input = file_get_contents("php://input");
+    $decode = json_decode($input, true);
+    $nombre = isset($decode['nombre']) ? $decode['nombre'] : "";
+    $nick = isset($decode['nick']) ? $decode['nick'] : "";
+    $clave = isset($decode['clave']) ? $decode['clave'] : "";
+    $confirm_clave = isset($decode['confirm_clave']) ? $decode['confirm_clave'] : "";
+    $id_caja = isset($decode['id_caja']) ? $decode['id_caja'] : "";
+
+    if ($nombre == "" || $nick == "" || $clave == "" || $confirm_clave == "" || $id_caja == "") {
+      $msg = "Todos los campos son obligatorios";
+      echo json_encode($msg, JSON_UNESCAPED_UNICODE);
+      die();
+    } else {
+      if ($clave != $confirm_clave) {
+        $msg = "Las contraseñas no coinciden";
+        echo json_encode($msg, JSON_UNESCAPED_UNICODE);
+        die();
+      } else {
+        $data = $this->model->verificarUsuario($nick, $nombre);
+        if ($data) {
+          $msg = "El usuario ya existe";
+          echo json_encode($msg, JSON_UNESCAPED_UNICODE);
+          die();
+        } else {
+          $data = $this->model->registrarUsuario($nombre, $nick, $clave, $id_caja);
+          if ($data == "ok") {
+            $msg = "ok";
+          } else {
+            $msg = "Error al registrar el usuario";
+          }
+        }
       }
     }
     echo json_encode($msg, JSON_UNESCAPED_UNICODE);

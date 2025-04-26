@@ -1,10 +1,16 @@
 let tblUsuarios;
-document.addEventListener("DOMContentLoaded", function () {
-  
-});
+document.addEventListener("DOMContentLoaded", function () {});
 
 $(document).ready(function () {
-  $("#tblUsuarios").DataTable({
+  tblUsuarios = $("#tblUsuarios").DataTable({
+    language: {
+      infoEmpty: "Ningún registro disponible",
+      info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+      lengthMenu: "_MENU_ &nbsp;&nbsp;registros por página",
+      search: "Buscar:&nbsp;",
+      zeroRecords: "No se encontraron resultados",
+      infoFiltered: "(filtrado de _MAX_ registros totales)",
+    },
     ajax: {
       url: `${base_url}Usuarios/listar`,
       dataSrc: "",
@@ -53,17 +59,89 @@ function frmLogin(e) {
   }
 }
 
-
-function btnEditUser(id_user){
-  console.log(id_user);
-  
-}
-
-function btnDeleteUser(id_user){
+function btnEditUser(id_user) {
   console.log(id_user);
 }
 
-function btnRestoreUser(id_user){
+function btnDeleteUser(id_user) {
   console.log(id_user);
-  
 }
+
+function btnRestoreUser(id_user) {
+  console.log(id_user);
+}
+
+async function registrarUsuario(e) {
+  e.preventDefault();
+  const form = document.getElementById("frmRegistrarUser");
+  const nick = document.getElementById("nick");
+  const name = document.getElementById("nombre");
+  const clave = document.getElementById("clave");
+  const confirm_clave = document.getElementById("confirm_clave");
+  const id_caja = document.getElementById("id_caja");
+
+  const respuesta = await fetch(`${base_url}Usuarios/registrar`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      nick: nick.value,
+      nombre: name.value,
+      clave: clave.value,
+      confirm_clave: confirm_clave.value,
+      id_caja: id_caja.value,
+    }),
+  });
+
+  const res = await respuesta.json();
+  if (res == "ok") {
+    // Mostrar mensaje de éxito
+    Swal.fire({
+      icon: "success",
+      title: "Usuario registrado con éxito",
+    });
+    // Recargar la tabla de usuarios
+    tblUsuarios.ajax.reload();
+    // Limpiar el formulario
+    form.reset();
+    // Cerrar el modal
+    $("#mdl_new_user").modal("hide");
+  } else {
+    // Mostrar mensaje de error
+    Swal.fire({
+      icon: "error",
+      title: res,
+      text: "",
+    });
+    form.reset();
+  }
+}
+
+// function registrarUsuario(e) {
+//   e.preventDefault();
+//   const nick = document.getElementById("nick");
+//   const name = document.getElementById("name");
+//   const clave = document.getElementById("clave");
+//   const confirm_clave = document.getElementById("confirm_clave");
+//   const id_caja = document.getElementById("id_caja");
+//   if (nick.value == "" || name.value == "" || clave.value == "") {
+//     $msg = "todos los campos son obligatorios";
+//   } else {
+//     const url = `${base_url}Usuarios/registrar`;
+//     const frm = document.getElementById("frmRegistrarUser");
+//     const http = new XMLHttpRequest();
+//     http.open("POST", url, true);
+//     http.send(new FormData(frm));
+//     http.onreadystatechange = function () {
+//       if (this.readyState == 4 && this.status == 200) {
+//         const res = JSON.parse(this.responseText);
+//         if (res == "ok") {
+//           $msg = "Usuario registrado con éxito";
+//         } else {
+//           $msg = "Error al registrar el usuario";
+//         }
+//       }
+//     };
+//   }
+// }

@@ -11,6 +11,7 @@
 
     <link href="<?= base_url ?>Assets/css/styles.css" rel="stylesheet" />
     <link href="<?= base_url ?>Assets/css/datatables.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="<?= base_url ?>Assets/css/sweetalert2.min.css">
     <script src="<?= base_url ?>Assets/js/fontawesome.all.js"></script>
 </head>
 

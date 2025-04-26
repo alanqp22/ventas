@@ -25,4 +25,12 @@ class Query extends Conexion
         $data = $result->fetchAll(PDO::FETCH_ASSOC);
         return $data;
     }
+
+    public function save(string $sql, array $data)
+    {
+        $this->sql = $sql;
+        $result = $this->con->prepare($this->sql);
+        $result->execute($data);
+        return $result->rowCount();
+    }
 }
