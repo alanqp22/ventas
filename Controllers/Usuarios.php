@@ -13,6 +13,13 @@ class Usuarios extends Controller
     $this->views->getView($this, "index", $data);
   }
 
+  public function edit(int $id)
+  {
+    $data = $this->model->getUserById($id);
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    die();
+  }
+
   public function listar()
   {
     $data = $this->model->getUsuarios();
@@ -31,6 +38,7 @@ class Usuarios extends Controller
     die();
   }
 
+  // Valida los datos del formulario de login
   public function validar()
   {
     if (empty($_POST["nick"]) || empty($_POST["clave"])) {

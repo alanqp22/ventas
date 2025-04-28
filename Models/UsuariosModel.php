@@ -13,6 +13,13 @@ class UsuariosModel extends Query
     return $data;
   }
 
+  public function getUserById(int $id_usuario)
+  {
+    $sql = "select * from usuarios where id_usuario='$id_usuario';";
+    $data = $this->select($sql);
+    return $data;
+  }
+
   public function verificarUsuario(string $nick, string $nombre)
   {
     $sql = "select * from usuarios where nick='$nick' or nombre='$nombre';";
