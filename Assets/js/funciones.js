@@ -60,7 +60,40 @@ function frmLogin(e) {
 }
 
 function btnEditUser(id_user) {
-  console.log(id_user);
+  let modalTitle = document.getElementById("modalTitle");
+  let btnRegistrar = document.getElementById("btnRegistrarUser");
+  modalTitle.innerText = "Actualizar Usuario";
+  btnRegistrar.innerText = "Actualizar Usuario";
+  btnRegistrar.setAttribute("onclick", `actualizarUsuario(${id_user})`);
+
+  const url = `${base_url}Usuarios/editar/${id_user}`;
+  const http = new XMLHttpRequest();
+  http.open("GET", url, true);
+  http.send();
+  http.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      const res = JSON.parse(this.responseText);
+      const id_usuario = document.getElementById("id_usuario");
+      const nick = document.getElementById("nick");
+      const name = document.getElementById("nombre");
+      const id_caja = document.getElementById("id_caja");
+      document.getElementById("divClave").classList.add("d-none");
+
+      id_usuario.value = res.id_usuario;
+      nick.value = res.nick;
+      name.value = res.nombre;
+      id_caja.value = res.id_caja;
+    }
+  };
+  $("#mdl_new_user").modal("show");
+}
+
+function actualizarUsuario(id_user) {
+  const form = document.getElementById("frmRegistrarUser");
+  const nick = document.getElementById("nick");
+  const name = document.getElementById("nombre");
+  const clave = document.getElementById("clave");
+  const confirm_clave = document.getElementById("confirm_clave");
 }
 
 function btnDeleteUser(id_user) {
@@ -69,6 +102,19 @@ function btnDeleteUser(id_user) {
 
 function btnRestoreUser(id_user) {
   console.log(id_user);
+}
+
+function showModalUsuario() {
+  let modalTitle = document.getElementById("modalTitle");
+  let btnRegistrar = document.getElementById("btnRegistrarUser");
+  document.getElementById("id_usuario").value = "";
+  modalTitle.innerText = "Nuevo Usuario";
+  btnRegistrar.innerText = "Registrar Usuario";
+  btnRegistrar.setAttribute("onclick", `registrarUsuario(e)`);
+  const form = document.getElementById("frmRegistrarUser");
+  form.reset();
+  document.getElementById("divClave").classList.remove("d-none");
+  $("#mdl_new_user").modal("show");
 }
 
 async function registrarUsuario(e) {

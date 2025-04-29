@@ -6,7 +6,7 @@ include "Views/Templates/header.php";
   <li class="breadcrumb-item active">usuario_estado</li>
 </ol>
 <div class="div">
-  <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#mdl_new_user">Nuevo Usuario</button>
+  <button class="btn btn-primary" type="button" onclick="showModalUsuario();">Nuevo Usuario</button>
 </div>
 <table class="table" id="tblUsuarios">
   <thead>
@@ -26,7 +26,7 @@ include "Views/Templates/header.php";
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Nuevo Usuario</h1>
+        <h1 class="modal-title fs-5" id="modalTitle">Nuevo Usuario</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form id="frmRegistrarUser" method="POST" onsubmit="registrarUsuario(event);">
@@ -35,6 +35,7 @@ include "Views/Templates/header.php";
           <div class="row mb-3">
             <div class="col-8">
               <label for="nombre" class="form-label">Nombre</label>
+              <input type="hidden" name="id_usuario" id="id_usuario">
               <input type="text" name="nombre" id="nombre" placeholder="Nombre" class="form-control" maxlength="50" required>
             </div>
             <div class="col-4">
@@ -42,7 +43,7 @@ include "Views/Templates/header.php";
               <input type="text" name="nick" id="nick" placeholder="Usuario" class="form-control" maxlength="20" required>
             </div>
           </div>
-          <div class="row mb-3">
+          <div class="row mb-3" id="divClave">
             <div class="col-6">
               <label for="clave" class="form-label">Contraseña</label>
               <input type="password" name="clave" id="clave" placeholder="Contraseña" class="form-control" required>
@@ -72,7 +73,7 @@ include "Views/Templates/header.php";
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <button type="submit" class="btn btn-primary">Registrar usuario</button>
+          <button type="submit" class="btn btn-primary" id="btnRegistrarUser">Registrar usuario</button>
         </div>
       </form>
     </div>

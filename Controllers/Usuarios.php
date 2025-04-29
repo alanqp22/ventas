@@ -13,7 +13,7 @@ class Usuarios extends Controller
     $this->views->getView($this, "index", $data);
   }
 
-  public function edit(int $id)
+  public function editar(int $id)
   {
     $data = $this->model->getUserById($id);
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
