@@ -126,6 +126,19 @@ async function registrarUsuario(e) {
   const confirm_clave = document.getElementById("confirm_clave");
   const id_caja = document.getElementById("id_caja");
 
+  if (
+    nick.value == "" ||
+    name.value == "" ||
+    clave.value == "" ||
+    confirm_clave.value == "" ||
+    id_caja.value == ""
+  ) {
+    Swal.fire({
+      icon: "error",
+      title: "Todos los campos son obligatorios",
+    });
+    return;
+  }
   const respuesta = await fetch(`${base_url}Usuarios/registrar`, {
     method: "POST",
     headers: {
@@ -153,6 +166,8 @@ async function registrarUsuario(e) {
     form.reset();
     // Cerrar el modal
     $("#mdl_new_user").modal("hide");
+    // simula redireccion
+    history.pushState(null, "", `${base_url}Usuarios`);
   } else {
     // Mostrar mensaje de error
     Swal.fire({
@@ -191,3 +206,8 @@ async function registrarUsuario(e) {
 //     };
 //   }
 // }
+
+const userModal = document.getElementById("mdl_new_user");
+userModal.addEventListener("hidden.bs.modal", (event) => {
+  document.getElementById("frmRegistrarUser").reset();
+});

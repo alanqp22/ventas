@@ -57,7 +57,7 @@ include "Views/Templates/header.php";
             <div class="col">
               <label for="id_caja">Caja</label>
               <select id="id_caja" name="id_caja" class="form-select" aria-label="Selección de caja" required>
-                <option selected>Selecciona una caja</option>
+                <option value="" selected>Selecciona una caja</option>
                 <?php
                 foreach ($params['cajas'] as $caja) {
                 ?>
