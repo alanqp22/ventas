@@ -178,35 +178,6 @@ async function registrarUsuario(e) {
     form.reset();
   }
 }
-
-// function registrarUsuario(e) {
-//   e.preventDefault();
-//   const nick = document.getElementById("nick");
-//   const name = document.getElementById("name");
-//   const clave = document.getElementById("clave");
-//   const confirm_clave = document.getElementById("confirm_clave");
-//   const id_caja = document.getElementById("id_caja");
-//   if (nick.value == "" || name.value == "" || clave.value == "") {
-//     $msg = "todos los campos son obligatorios";
-//   } else {
-//     const url = `${base_url}Usuarios/registrar`;
-//     const frm = document.getElementById("frmRegistrarUser");
-//     const http = new XMLHttpRequest();
-//     http.open("POST", url, true);
-//     http.send(new FormData(frm));
-//     http.onreadystatechange = function () {
-//       if (this.readyState == 4 && this.status == 200) {
-//         const res = JSON.parse(this.responseText);
-//         if (res == "ok") {
-//           $msg = "Usuario registrado con éxito";
-//         } else {
-//           $msg = "Error al registrar el usuario";
-//         }
-//       }
-//     };
-//   }
-// }
-
 const userModal = document.getElementById("mdl_new_user");
 userModal.addEventListener("hidden.bs.modal", (event) => {
   document.getElementById("frmRegistrarUser").reset();

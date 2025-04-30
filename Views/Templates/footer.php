@@ -22,7 +22,7 @@
 <script>
     const base_url = "<?= base_url ?>";
 </script>
-<script src="<?= base_url ?>Assets/js/funciones.js"></script>
+<script src="<?= base_url ?>resources/Usuario/app.js" type="module"></script>
 </body>
 
 </html>
