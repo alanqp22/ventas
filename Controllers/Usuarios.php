@@ -24,14 +24,25 @@ class Usuarios extends Controller
   {
     $data = $this->model->getUsuarios();
     for ($i = 0; $i < count($data); $i++) {
+      $id = (int)$data[$i]["id_usuario"];
       if ($data[$i]["usuario_estado"] == 1) {
         $data[$i]["estado"] = '<span class="badge text-bg-primary">Activo</span>';
-        $data[$i]["acciones"] =
-          '<button class="btn btn-primary" type="button" onclick="btnEditUser(' . $data[$i]["id_usuario"] . ');"><i class="fas fa-edit"></i></button>
-        <button class="btn btn-danger" type="button" onclick="btnDeleteUser(' . $data[$i]["id_usuario"] . ');"><i class="fas fa-trash"></i></button>';
+        $data[$i]["acciones"] = <<<HTML
+          <button class="btn btn-primary btn-edit" data-id="$id">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="btn btn-danger btn-delete" data-id="$id">
+            <i class="fas fa-trash"></i>
+          </button>
+        HTML;
       } else {
         $data[$i]["estado"] = '<span class="badge text-bg-danger">Inactivo</span>';
-        $data[$i]["acciones"] = '<button class="btn btn-success" type="button" onclick="btnRestoreUser(' . $data[$i]["id_usuario"] . ');"><i class="fas fa-trash-can-arrow-up"></i></button>';
+        $data[$i]["acciones"] = '';
+        $data[$i]["acciones"] = <<<HTML
+          <button class="btn btn-success" data-id="$id">
+            <i class="fas fa-trash-can-arrow-up"></i>
+          </button>
+        HTML;
       }
     }
     echo json_encode($data, JSON_UNESCAPED_UNICODE);

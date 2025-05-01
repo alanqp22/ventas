@@ -1,11 +1,10 @@
 class Usuario {
   constructor(apiClient) {
     this.apiClient = apiClient;
-    this.resource = "Usuarios/listar"; // Este debe coincidir con el nombre del archivo PHP: usuario.php
   }
 
   getTodos() {
-    return this.apiClient.getAll(this.resource);
+    return this.apiClient.getAll("listar");
   }
 
   getPorId(id) {

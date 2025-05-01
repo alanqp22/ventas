@@ -6,7 +6,7 @@ include "Views/Templates/header.php";
   <li class="breadcrumb-item active">usuario_estado</li>
 </ol>
 <div class="div">
-  <button class="btn btn-primary" type="button" onclick="showModalUsuario();">Nuevo Usuario</button>
+  <button class="btn btn-primary" type="button" id="btnNewUser">Nuevo Usuario</button>
 </div>
 <table class="table" id="tblUsuarios">
   <thead>
@@ -29,7 +29,7 @@ include "Views/Templates/header.php";
         <h1 class="modal-title fs-5" id="modalTitle">Nuevo Usuario</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form id="frmRegistrarUser" method="POST" onsubmit="registrarUsuario(event);">
+      <form id="frmRegistrarUser" method="POST">
         <div class="modal-body">
 
           <div class="row mb-3">

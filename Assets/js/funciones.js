@@ -118,7 +118,6 @@ function showModalUsuario() {
 }
 
 async function registrarUsuario(e) {
-  e.preventDefault();
   const form = document.getElementById("frmRegistrarUser");
   const nick = document.getElementById("nick");
   const name = document.getElementById("nombre");

@@ -1,10 +1,16 @@
 class ApiClient {
-  constructor(baseURL = "") {
+  baseURL: string;
+  constructor(baseURL: string = "") {
     this.baseURL = baseURL;
   }
 
-  async request(endpoint, method = "GET", data = null, headers = {}) {
-    const config = {
+  async request(
+    endpoint: string,
+    method: string = "GET",
+    data: any = null,
+    headers: Record<string, string> = {}
+  ) {
+    const config: RequestInit = {
       method,
       headers: {
         "Content-Type": "application/json",
@@ -26,33 +32,33 @@ class ApiClient {
           : await response.text();
 
       if (!response.ok) {
-        throw new Error(result.message || "Error en la solicitud");
+        throw new Error((result as any).message || "Error en la solicitud");
       }
 
       return result;
     } catch (error) {
-      console.error(`[${method}] ${endpoint} →`, error.message);
+      console.error(`[${method}] ${endpoint} →`, (error as any).message);
       throw error;
     }
   }
 
-  getAll(resource, headers = {}) {
+  getAll(resource: string, headers = {}) {
     return this.request(resource, "GET", null, headers);
   }
 
-  getById(resource, id, headers = {}) {
+  getById(resource: string, id: string, headers = {}) {
     return this.request(`${resource}.php?id=${id}`, "GET", null, headers);
   }
 
-  create(resource, data, headers = {}) {
+  create(resource: string, data: any, headers = {}) {
     return this.request(`${resource}.php`, "POST", data, headers);
   }
 
-  update(resource, id, data, headers = {}) {
+  update(resource: string, id: string, data: any, headers = {}) {
     return this.request(`${resource}.php?id=${id}`, "PUT", data, headers);
   }
 
-  delete(resource, id, headers = {}) {
+  delete(resource: string, id: string, headers = {}) {
     return this.request(`${resource}.php?id=${id}`, "DELETE", null, headers);
   }
 }
