@@ -14,15 +14,7 @@
 </footer>
 </div>
 </div>
-<script src="<?= base_url ?>Assets/js/jquery-3.7.1.min.js"></script>
-<script src="<?= base_url ?>Assets/js/datatables.min.js"></script>
-<script src="<?= base_url ?>Assets/js/bootstrap.bundle.min.js"></script>
 <script src="<?= base_url ?>Assets/js/scripts.js"></script>
-<script src="<?= base_url ?>Assets/js/sweetalert2.all.min.js"></script>
-<script>
-    const base_url = "<?= base_url ?>";
-</script>
-<script src="<?= base_url ?>resources/Usuario/app.js" type="module"></script>
 </body>
 
 </html>

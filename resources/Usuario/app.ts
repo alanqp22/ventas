@@ -1,21 +1,36 @@
-import ApiClient from "../services/ApiClient";
-import Usuario from "./Usuario";
+// import ApiClient from "../services/ApiClient";
+// import Usuario from "./Usuario";
 import Swal from "sweetalert2";
-
+import $ from "jquery";
+import "datatables.net";
+import "datatables.net-dt/css/dataTables.dataTables.min.css";
+import "bootstrap";
+import { Modal } from "bootstrap";
 declare const base_url: string;
 
-let frmRegistrarUser = document.getElementById("frmRegistrarUser");
+let frmRegistrarUser = document.getElementById(
+  "frmRegistrarUser"
+) as HTMLFormElement;
 let btnRegistrar = document.getElementById("btnRegistrarUser");
 let btnNewUser = document.getElementById("btnNewUser");
-let inputIdUser = document.getElementById("id_usuario");
+let inputIdUser = document.getElementById("id_usuario") as HTMLInputElement;
+
+const modalNewUser = document.getElementById("mdl_new_user") as HTMLElement;
+if (btnNewUser && modalNewUser) {
+  const modalInstance = new Modal(modalNewUser);
+
+  btnNewUser.addEventListener("click", () => {
+    modalInstance.show();
+  });
+}
+
 let modalTitle = document.getElementById("modalTitle");
 let divClave = document.getElementById("divClave");
-const apiClient = new ApiClient(`${base_url}Usuarios/`);
-const usuario = new Usuario(apiClient);
+// const apiClient = new ApiClient(`${base_url}Usuarios/`);
+// const usuario = new Usuario(apiClient);
+let tblUsuarios: DataTables.Api | undefined = initDataTable();
 
 async function main() {
-  let tblUsuarios = initDataTable();
-
   btnNewUser?.addEventListener("click", showModalRegister);
   frmRegistrarUser?.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -23,7 +38,7 @@ async function main() {
   });
 }
 
-function submitFrmRegistrarUser() {
+async function submitFrmRegistrarUser() {
   const nick = document.getElementById("nick") as HTMLInputElement;
   const name = document.getElementById("nombre") as HTMLInputElement;
   const clave = document.getElementById("clave") as HTMLInputElement;
@@ -67,10 +82,10 @@ function submitFrmRegistrarUser() {
       icon: "success",
       title: "Usuario registrado con éxito",
     });
+    tblUsuarios?.ajax.reload();
     // Recargar la tabla de usuarios
-    tblUsuarios.ajax.reload();
     // Limpiar el formulario
-    form.reset();
+    frmRegistrarUser?.reset();
     // Cerrar el modal
     $("#mdl_new_user").modal("hide");
     // simula redireccion
@@ -82,17 +97,18 @@ function submitFrmRegistrarUser() {
       title: res,
       text: "",
     });
-    form.reset();
+    frmRegistrarUser.reset();
   }
 }
 
 function showModalRegister() {
   inputIdUser.value = "";
-  modalTitle.innerText = "Nuevo Usuario";
-  btnRegistrar.innerText = "Registrar Usuario";
+  modalTitle !== null ? (modalTitle.innerText = "Nuevo Usuario") : "";
+  btnRegistrar !== null ? (btnRegistrar.innerText = "Registrar Usuario") : "";
+
   frmRegistrarUser.reset();
-  divClave.classList.remove("d-none");
-  $("#mdl_new_user").modal("show");
+  divClave !== null ? divClave.classList.remove("d-none") : "";
+  // $("#mdl_new_user").modal("show");
 }
 
 function initDataTable() {

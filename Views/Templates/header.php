@@ -1,3 +1,6 @@
+<?php
+require_once __DIR__ . "/Vite.php";
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -10,9 +13,16 @@
     <title>Sys Ventas</title>
 
     <link href="<?= base_url ?>Assets/css/styles.css" rel="stylesheet" />
-    <link href="<?= base_url ?>Assets/css/datatables.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="<?= base_url ?>Assets/css/sweetalert2.min.css">
+    <script>
+        const base_url = "<?= base_url ?>";
+    </script>
+
     <script src="<?= base_url ?>Assets/js/fontawesome.all.js"></script>
+
+    <?php
+    vite('Usuario/app'); // O caja/app, etc. 
+    ?>
+
 </head>
 
 <body class="sb-nav-fixed">

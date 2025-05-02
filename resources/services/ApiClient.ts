@@ -4,7 +4,7 @@ class ApiClient {
     this.baseURL = baseURL;
   }
 
-  async request(
+  private async request(
     endpoint: string,
     method: string = "GET",
     data: any = null,
@@ -42,23 +42,23 @@ class ApiClient {
     }
   }
 
-  getAll(resource: string, headers = {}) {
+  public getAll(resource: string, headers = {}) {
     return this.request(resource, "GET", null, headers);
   }
 
-  getById(resource: string, id: string, headers = {}) {
+  public getById(resource: string, id: string, headers = {}) {
     return this.request(`${resource}.php?id=${id}`, "GET", null, headers);
   }
 
-  create(resource: string, data: any, headers = {}) {
+  public create(resource: string, data: any, headers = {}) {
     return this.request(`${resource}.php`, "POST", data, headers);
   }
 
-  update(resource: string, id: string, data: any, headers = {}) {
+  public update(resource: string, id: string, data: any, headers = {}) {
     return this.request(`${resource}.php?id=${id}`, "PUT", data, headers);
   }
 
-  delete(resource: string, id: string, headers = {}) {
+  public delete(resource: string, id: string, headers = {}) {
     return this.request(`${resource}.php?id=${id}`, "DELETE", null, headers);
   }
 }

@@ -1,5 +1,9 @@
+import ApiClient from "../services/ApiClient";
+
 class Usuario {
-  constructor(apiClient) {
+  private apiClient: ApiClient;
+  private resource: string = "Usuarios";
+  constructor(apiClient: ApiClient) {
     this.apiClient = apiClient;
   }
 
@@ -7,19 +11,19 @@ class Usuario {
     return this.apiClient.getAll("listar");
   }
 
-  getPorId(id) {
+  getPorId(id: string) {
     return this.apiClient.getById(this.resource, id);
   }
 
-  crear(data) {
+  crear(data: any) {
     return this.apiClient.create(this.resource, data);
   }
 
-  actualizar(id, data) {
+  actualizar(id: string, data: any) {
     return this.apiClient.update(this.resource, id, data);
   }
 
-  eliminar(id) {
+  eliminar(id: any) {
     return this.apiClient.delete(this.resource, id);
   }
 }
