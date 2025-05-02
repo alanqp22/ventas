@@ -16,12 +16,10 @@ let btnNewUser = document.getElementById("btnNewUser");
 let inputIdUser = document.getElementById("id_usuario") as HTMLInputElement;
 
 const modalNewUser = document.getElementById("mdl_new_user") as HTMLElement;
+let modalInstance: Modal;
 if (btnNewUser && modalNewUser) {
-  const modalInstance = new Modal(modalNewUser);
-
-  btnNewUser.addEventListener("click", () => {
-    modalInstance.show();
-  });
+  modalInstance = new Modal(modalNewUser);
+  btnNewUser.addEventListener("click", () => showModalRegister(modalInstance));
 }
 
 let modalTitle = document.getElementById("modalTitle");
@@ -31,7 +29,7 @@ let divClave = document.getElementById("divClave");
 let tblUsuarios: DataTables.Api | undefined = initDataTable();
 
 async function main() {
-  btnNewUser?.addEventListener("click", showModalRegister);
+  btnNewUser?.addEventListener("click", () => showModalRegister(modalInstance));
   frmRegistrarUser?.addEventListener("submit", function (e) {
     e.preventDefault();
     submitFrmRegistrarUser();
@@ -82,12 +80,17 @@ async function submitFrmRegistrarUser() {
       icon: "success",
       title: "Usuario registrado con éxito",
     });
-    tblUsuarios?.ajax.reload();
+    if (tblUsuarios) {
+      tblUsuarios.ajax.reload();
+    } else {
+      console.log("no se instancion datatable");
+    }
+
     // Recargar la tabla de usuarios
     // Limpiar el formulario
     frmRegistrarUser?.reset();
     // Cerrar el modal
-    $("#mdl_new_user").modal("hide");
+    hideModalRegister(modalInstance);
     // simula redireccion
     history.pushState(null, "", `${base_url}Usuarios`);
   } else {
@@ -101,14 +104,18 @@ async function submitFrmRegistrarUser() {
   }
 }
 
-function showModalRegister() {
+function showModalRegister(modalInstance: Modal) {
   inputIdUser.value = "";
   modalTitle !== null ? (modalTitle.innerText = "Nuevo Usuario") : "";
   btnRegistrar !== null ? (btnRegistrar.innerText = "Registrar Usuario") : "";
 
   frmRegistrarUser.reset();
   divClave !== null ? divClave.classList.remove("d-none") : "";
-  // $("#mdl_new_user").modal("show");
+  modalInstance.show();
+}
+
+function hideModalRegister(modalInstance: Modal) {
+  modalInstance.hide();
 }
 
 function initDataTable() {
