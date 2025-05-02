@@ -28,10 +28,10 @@ class Usuarios extends Controller
       if ($data[$i]["usuario_estado"] == 1) {
         $data[$i]["estado"] = '<span class="badge text-bg-primary">Activo</span>';
         $data[$i]["acciones"] = <<<HTML
-          <button class="btn btn-primary btn-edit" data-id="$id">
+          <button class="btn btn-primary btnEditarUser" data-id="$id">
             <i class="fas fa-edit"></i>
           </button>
-          <button class="btn btn-danger btn-delete" data-id="$id">
+          <button class="btn btn-danger btnDeleteUser" data-id="$id">
             <i class="fas fa-trash"></i>
           </button>
         HTML;

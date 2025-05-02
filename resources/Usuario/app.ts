@@ -13,6 +13,8 @@ let frmRegistrarUser = document.getElementById(
 ) as HTMLFormElement;
 let btnRegistrar = document.getElementById("btnRegistrarUser");
 let btnNewUser = document.getElementById("btnNewUser");
+
+let btnDeleteUser = document.getElementById("btnDeleteUser");
 let inputIdUser = document.getElementById("id_usuario") as HTMLInputElement;
 
 const modalNewUser = document.getElementById("mdl_new_user") as HTMLElement;
@@ -26,14 +28,43 @@ let modalTitle = document.getElementById("modalTitle");
 let divClave = document.getElementById("divClave");
 // const apiClient = new ApiClient(`${base_url}Usuarios/`);
 // const usuario = new Usuario(apiClient);
-let tblUsuarios: DataTables.Api | undefined = initDataTable();
+let tblUsuarios: DataTables.Api;
 
 async function main() {
-  btnNewUser?.addEventListener("click", () => showModalRegister(modalInstance));
+  tblUsuarios = await initDataTable();
+  btnNewUser?.addEventListener("click", () =>
+    showModalRegister(modalInstance, "registrar")
+  );
   frmRegistrarUser?.addEventListener("submit", function (e) {
     e.preventDefault();
     submitFrmRegistrarUser();
   });
+  window.addEventListener("DOMContentLoaded", () => {
+    document.body.addEventListener("click", (e) => {
+      // Encontramos el botón que fue clickeado, no importa si es el icono o el botón
+      const target = e.target as HTMLElement;
+
+      // Usamos closest para subir hasta el botón que contiene la clase 'btnEditarUser'
+      const btn = target.closest(".btnEditarUser");
+
+      if (btn) {
+        const id = btn.getAttribute("data-id");
+        if (id) {
+          editUser(id); // Llamar a la función de edición
+        }
+      }
+    });
+  });
+}
+
+function editUser(id: string) {
+  console.log("hola");
+
+  inputIdUser.value = id;
+  modalTitle !== null ? (modalTitle.innerText = "Editar Usuario") : "";
+  btnRegistrar !== null ? (btnRegistrar.innerText = "Actualizar Usuario") : "";
+  divClave !== null ? divClave.classList.add("d-none") : "";
+  showModalRegister(modalInstance, "Editar Usuario");
 }
 
 async function submitFrmRegistrarUser() {
@@ -104,9 +135,9 @@ async function submitFrmRegistrarUser() {
   }
 }
 
-function showModalRegister(modalInstance: Modal) {
+function showModalRegister(modalInstance: Modal, title: string) {
   inputIdUser.value = "";
-  modalTitle !== null ? (modalTitle.innerText = "Nuevo Usuario") : "";
+  modalTitle !== null ? (modalTitle.innerText = title) : "";
   btnRegistrar !== null ? (btnRegistrar.innerText = "Registrar Usuario") : "";
 
   frmRegistrarUser.reset();
@@ -118,32 +149,40 @@ function hideModalRegister(modalInstance: Modal) {
   modalInstance.hide();
 }
 
-function initDataTable() {
-  let tblUsuarios;
-  $(document).ready(function () {
-    tblUsuarios = $("#tblUsuarios").DataTable({
-      language: {
-        infoEmpty: "Ningún registro disponible",
-        info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
-        lengthMenu: "_MENU_ &nbsp;&nbsp;registros por página",
-        search: "Buscar:&nbsp;",
-        zeroRecords: "No se encontraron resultados",
-        infoFiltered: "(filtrado de _MAX_ registros totales)",
-      },
-      ajax: {
-        url: `${base_url}Usuarios/listar`,
-        dataSrc: "",
-      },
-      columns: [
-        { data: "id_usuario" },
-        { data: "nick" },
-        { data: "nombre" },
-        { data: "caja" },
-        { data: "estado" },
-        { data: "acciones" },
-      ],
-    });
+async function initDataTable(): Promise<DataTables.Api> {
+  // Espera a que el DOM esté listo
+  await new Promise<void>((resolve) => {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", () => resolve());
+    } else {
+      resolve();
+    }
   });
+
+  // Inicializa DataTable
+  const tblUsuarios = $("#tblUsuarios").DataTable({
+    language: {
+      infoEmpty: "Ningún registro disponible",
+      info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+      lengthMenu: "_MENU_ &nbsp;&nbsp;registros por página",
+      search: "Buscar:&nbsp;",
+      zeroRecords: "No se encontraron resultados",
+      infoFiltered: "(filtrado de _MAX_ registros totales)",
+    },
+    ajax: {
+      url: `${base_url}Usuarios/listar`,
+      dataSrc: "",
+    },
+    columns: [
+      { data: "id_usuario" },
+      { data: "nick" },
+      { data: "nombre" },
+      { data: "caja" },
+      { data: "estado" },
+      { data: "acciones" },
+    ],
+  });
+
   return tblUsuarios;
 }
 

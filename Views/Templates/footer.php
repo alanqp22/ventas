@@ -15,6 +15,7 @@
 </div>
 </div>
 <script src="<?= base_url ?>Assets/js/scripts.js"></script>
+
 </body>
 
 </html>
