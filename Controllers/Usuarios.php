@@ -75,43 +75,52 @@ class Usuarios extends Controller
 
   public function registrar()
   {
+    header('Content-Type: application/json; charset=utf-8');
     if ($_SERVER['REQUEST_METHOD'] != "POST") {
-      echo json_encode(['error' => '404']);
-      die();
+      http_response_code(405); // Method Not Allowed
+      echo json_encode(['message' => 'Método no permitido'], JSON_UNESCAPED_UNICODE);
+      return;
     }
-    $input = file_get_contents("php://input");
-    $decode = json_decode($input, true);
-    $nombre = isset($decode['nombre']) ? $decode['nombre'] : "";
-    $nick = isset($decode['nick']) ? $decode['nick'] : "";
-    $clave = isset($decode['clave']) ? $decode['clave'] : "";
-    $confirm_clave = isset($decode['confirm_clave']) ? $decode['confirm_clave'] : "";
-    $id_caja = isset($decode['id_caja']) ? $decode['id_caja'] : "";
 
-    if ($nombre == "" || $nick == "" || $clave == "" || $confirm_clave == "" || $id_caja == "") {
-      $msg = "Todos los campos son obligatorios";
-      echo json_encode($msg, JSON_UNESCAPED_UNICODE);
-      die();
-    } else {
-      if ($clave != $confirm_clave) {
-        $msg = "Las contraseñas no coinciden";
-        echo json_encode($msg, JSON_UNESCAPED_UNICODE);
-        die();
-      } else {
-        $data = $this->model->verificarUsuario($nick, $nombre);
-        if ($data) {
-          $msg = "El usuario ya existe";
-          echo json_encode($msg, JSON_UNESCAPED_UNICODE);
-          die();
-        } else {
-          $data = $this->model->registrarUsuario($nombre, $nick, $clave, $id_caja);
-          if ($data == "ok") {
-            $msg = "ok";
-          } else {
-            $msg = "Error al registrar el usuario";
-          }
-        }
+    $input = json_decode(file_get_contents("php://input"), true);
+
+    $required = ['nombre', 'nick', 'clave', 'confirm_clave', 'id_caja'];
+
+    foreach ($required as $field) {
+      if (empty($input[$field])) {
+        http_response_code(400); // Bad Request
+        echo json_encode(['message' => "El campo $field es obligatorio"], JSON_UNESCAPED_UNICODE);
+        return;
       }
     }
-    echo json_encode($msg, JSON_UNESCAPED_UNICODE);
+
+    $nombre = trim(htmlspecialchars($input['nombre']));
+    $nick = trim(htmlspecialchars($input['nick']));
+    $clave = $input['clave'];
+    $confirm_clave = $input['confirm_clave'];
+    $id_caja = $input['id_caja'];
+
+    if ($clave != $confirm_clave) {
+      http_response_code(400); // Bad Request
+      echo json_encode(['message' => 'Las contraseñas no coinciden'], JSON_UNESCAPED_UNICODE);
+      return;
+    }
+
+    if ($this->model->verificarUsuario($nick, $nombre)) {
+      http_response_code(409);
+      echo json_encode(['message' => 'El usuario ya existe'], JSON_UNESCAPED_UNICODE);
+      return;
+    }
+
+    $hash = password_hash($clave, PASSWORD_BCRYPT);
+    $result = $this->model->registrarUsuario($nombre, $nick, $hash, $id_caja);
+
+    if ($result === "ok") {
+      http_response_code(201); // Created      
+      echo json_encode(['status' => 'ok'], JSON_UNESCAPED_UNICODE);
+    } else {
+      http_response_code(500); // Internal Server Error
+      echo json_encode(['message' => 'Error al registrar el usuario'], JSON_UNESCAPED_UNICODE);
+    }
   }
 }

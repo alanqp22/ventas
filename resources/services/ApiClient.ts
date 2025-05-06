@@ -1,5 +1,6 @@
 class ApiClient {
   private baseURL: string;
+
   constructor(baseURL: string = "") {
     this.baseURL = baseURL;
   }
@@ -32,9 +33,16 @@ class ApiClient {
           : await response.text();
 
       if (!response.ok) {
-        throw new Error((result as any).message || "Error en la solicitud");
+        const message =
+          typeof result === "string"
+            ? result
+            : result?.message || "Error en la solicitud";
+        throw new Error(message);
       }
-
+      // Normalizar respuesta si es texto plano "ok"
+      if (typeof result === "string") {
+        return { status: result }; // convierte "ok" en { status: "ok" }
+      }
       return result;
     } catch (error) {
       console.error(`[${method}] ${endpoint} →`, (error as any).message);

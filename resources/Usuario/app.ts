@@ -16,7 +16,7 @@ let inputIdUser = document.getElementById("id_usuario") as HTMLInputElement;
 let tblUsuarios: DataTables.Api;
 
 // API CLIENT
-const apiClient = new ApiClient(`${base_url}Usuarios/`);
+const apiClient = new ApiClient();
 
 async function main() {
   // Modal
@@ -95,43 +95,43 @@ async function submitFrmRegistrarUser(e: Event, mymodal: MyModal) {
     return;
   }
 
-  const resp = await apiClient.create("registrar", {
-    nick: nick.value,
-    nombre: name.value,
-    clave: clave.value,
-    confirm_clave: confirm_clave.value,
-    id_caja: id_caja.value,
-  });
-  console.log(resp);
+  try {
+    const resp = await apiClient.create("Usuarios/registrar", {
+      nick: nick.value,
+      nombre: name.value,
+      clave: clave.value,
+      confirm_clave: confirm_clave.value,
+      id_caja: id_caja.value,
+    });
+    if (resp.status == "ok") {
+      Swal.fire({
+        icon: "success",
+        title: "Usuario registrado con éxito",
+      });
+      if (tblUsuarios) {
+        tblUsuarios.ajax.reload();
+      } else {
+        console.log("No se pudo recargar la tabla de usuarios");
+      }
 
-  // if (resp == "ok") {
-  //   // Mostrar mensaje de éxito
-  //   Swal.fire({
-  //     icon: "success",
-  //     title: "Usuario registrado con éxito",
-  //   });
-  //   if (tblUsuarios) {
-  //     tblUsuarios.ajax.reload();
-  //   } else {
-  //     console.log("no se instancion datatable");
-  //   }
-
-  //   // Recargar la tabla de usuarios
-  //   // Limpiar el formulario
-  //   frmRegistrarUser?.reset();
-  //   // Cerrar el modal
-  //   hideModalRegister(modalInstance);
-  //   // simula redireccion
-  //   history.pushState(null, "", `${base_url}Usuarios`);
-  // } else {
-  //   // Mostrar mensaje de error
-  //   Swal.fire({
-  //     icon: "error",
-  //     title: res,
-  //     text: "",
-  //   });
-  //   frmRegistrarUser.reset();
-  // }
+      mymodal.reset();
+      mymodal.hide();
+      // simula redireccion
+      history.pushState(null, "", `${base_url}Usuarios`);
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: resp.error,
+        text: "",
+      });
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: String(error) || "Error",
+      text: "Por favor, inténtelo de nuevo más tarde.",
+    });
+  }
 }
 
 async function initDataTable(): Promise<DataTables.Api> {
