@@ -44,6 +44,8 @@ async function main() {
   });
 
   tblUsuarios = await initDataTable();
+
+  // Editar y eliminar usuario
   window.addEventListener("DOMContentLoaded", () => {
     document.body.addEventListener("click", (e) => {
       // Encontramos el botón que fue clickeado, no importa si es el icono o el botón
@@ -55,14 +57,20 @@ async function main() {
       if (btn) {
         const id = btn.getAttribute("data-id");
         if (id) {
-          editUser(id); // Llamar a la función de edición
+          editUser(id, myModal); // Llamar a la función de edición
         }
       }
     });
   });
 }
 
-function editUser(id: string) {
+function editUser(id: string, myModal: MyModal) {
+  console.log("hola mundo" + id);
+  myModal.setTitle("Editar Usuario");
+  myModal.setBtnDone("Actualizar Usuario");
+  myModal.hideFields(document.getElementById("divClave")!);
+  myModal.show();
+  myModal.setIdUser(id);
   // inputIdUser.value = id;
   // modalTitle !== null ? (modalTitle.innerText = "Editar Usuario") : "";
   // btnRegistrar !== null ? (btnRegistrar.innerText = "Actualizar Usuario") : "";
@@ -70,8 +78,16 @@ function editUser(id: string) {
   // showModalRegister(modalInstance, "Editar Usuario");
 }
 
-async function submitFrmRegistrarUser(e: Event, mymodal: MyModal) {
+async function submitFrmRegistrarUser(
+  e: Event,
+  mymodal: MyModal,
+  id_usuario?: string
+) {
   e.preventDefault();
+  if (id_usuario) {
+    updateUser(id_usuario, mymodal);
+    return;
+  }
 
   const nick = document.getElementById("nick") as HTMLInputElement;
   const name = document.getElementById("nombre") as HTMLInputElement;
@@ -108,30 +124,31 @@ async function submitFrmRegistrarUser(e: Event, mymodal: MyModal) {
         icon: "success",
         title: "Usuario registrado con éxito",
       });
+
       if (tblUsuarios) {
         tblUsuarios.ajax.reload();
       } else {
         console.log("No se pudo recargar la tabla de usuarios");
       }
 
+      // Limpiar el formulario y ocultar el modal
       mymodal.reset();
       mymodal.hide();
       // simula redireccion
       history.pushState(null, "", `${base_url}Usuarios`);
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: resp.error,
-        text: "",
-      });
     }
   } catch (error) {
     Swal.fire({
       icon: "error",
-      title: String(error) || "Error",
+      title: (error as any).message || "Error",
       text: "Por favor, inténtelo de nuevo más tarde.",
     });
   }
+}
+
+async function updateUser(id: string, mymodal: MyModal): Promise<void> {
+  console.log("vamos a actualizar el usuario " + id);
+  mymodal.setIdUser("");
 }
 
 async function initDataTable(): Promise<DataTables.Api> {
