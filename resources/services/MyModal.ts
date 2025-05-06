@@ -51,7 +51,6 @@ class MyModal {
   public show() {
     this.frmModal.reset();
     this.modal.show();
-    console.log("hola desde show modal");
   }
 
   public hide() {

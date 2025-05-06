@@ -1,5 +1,5 @@
 class ApiClient {
-  baseURL: string;
+  private baseURL: string;
   constructor(baseURL: string = "") {
     this.baseURL = baseURL;
   }
@@ -50,8 +50,8 @@ class ApiClient {
     return this.request(`${resource}.php?id=${id}`, "GET", null, headers);
   }
 
-  public create(resource: string, data: any, headers = {}) {
-    return this.request(`${resource}.php`, "POST", data, headers);
+  public async create(resource: string, data: any, headers = {}) {
+    return await this.request(`${resource}`, "POST", data, headers);
   }
 
   public update(resource: string, id: string, data: any, headers = {}) {

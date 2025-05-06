@@ -1,5 +1,5 @@
-// import ApiClient from "../services/ApiClient";
-// import Usuario from "./Usuario";
+import ApiClient from "../services/ApiClient";
+
 import Swal from "sweetalert2";
 import $ from "jquery";
 import "datatables.net";
@@ -13,9 +13,10 @@ declare const base_url: string;
 let btnDeleteUser = document.getElementById("btnDeleteUser");
 let inputIdUser = document.getElementById("id_usuario") as HTMLInputElement;
 
-// const apiClient = new ApiClient(`${base_url}Usuarios/`);
-// const usuario = new Usuario(apiClient);
 let tblUsuarios: DataTables.Api;
+
+// API CLIENT
+const apiClient = new ApiClient(`${base_url}Usuarios/`);
 
 async function main() {
   // Modal
@@ -72,44 +73,38 @@ function editUser(id: string) {
 async function submitFrmRegistrarUser(e: Event, mymodal: MyModal) {
   e.preventDefault();
 
-  // const nick = document.getElementById("nick") as HTMLInputElement;
-  // const name = document.getElementById("nombre") as HTMLInputElement;
-  // const clave = document.getElementById("clave") as HTMLInputElement;
-  // const confirm_clave = document.getElementById(
-  //   "confirm_clave"
-  // ) as HTMLInputElement;
-  // const id_caja = document.getElementById("id_caja") as HTMLInputElement;
+  const nick = document.getElementById("nick") as HTMLInputElement;
+  const name = document.getElementById("nombre") as HTMLInputElement;
+  const clave = document.getElementById("clave") as HTMLInputElement;
+  const confirm_clave = document.getElementById(
+    "confirm_clave"
+  ) as HTMLInputElement;
+  const id_caja = document.getElementById("id_caja") as HTMLInputElement;
 
-  // if (
-  //   nick.value == "" ||
-  //   name.value == "" ||
-  //   clave.value == "" ||
-  //   confirm_clave.value == "" ||
-  //   id_caja.value == ""
-  // ) {
-  //   Swal.fire({
-  //     icon: "error",
-  //     title: "Todos los campos son obligatorios",
-  //   });
-  //   return;
-  // }
+  if (
+    nick.value == "" ||
+    name.value == "" ||
+    clave.value == "" ||
+    confirm_clave.value == "" ||
+    id_caja.value == ""
+  ) {
+    Swal.fire({
+      icon: "error",
+      title: "Todos los campos son obligatorios",
+    });
+    return;
+  }
 
-  // const respuesta = await fetch(`${base_url}Usuarios/registrar`, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({
-  //     nick: nick.value,
-  //     nombre: name.value,
-  //     clave: clave.value,
-  //     confirm_clave: confirm_clave.value,
-  //     id_caja: id_caja.value,
-  //   }),
-  // });
+  const resp = await apiClient.create("registrar", {
+    nick: nick.value,
+    nombre: name.value,
+    clave: clave.value,
+    confirm_clave: confirm_clave.value,
+    id_caja: id_caja.value,
+  });
+  console.log(resp);
 
-  // const res = await respuesta.json();
-  // if (res == "ok") {
+  // if (resp == "ok") {
   //   // Mostrar mensaje de éxito
   //   Swal.fire({
   //     icon: "success",

@@ -76,7 +76,7 @@ class Usuarios extends Controller
   public function registrar()
   {
     if ($_SERVER['REQUEST_METHOD'] != "POST") {
-      echo json_encode(['error' => 'Método no permitido']);
+      echo json_encode(['error' => '404']);
       die();
     }
     $input = file_get_contents("php://input");
