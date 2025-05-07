@@ -12,8 +12,10 @@ declare const base_url: string;
 
 let btnDeleteUser = document.getElementById("btnDeleteUser");
 let inputIdUser = document.getElementById("id_usuario") as HTMLInputElement;
-
+let isUpdating = false;
+let id_usuario = "";
 let tblUsuarios: DataTables.Api;
+let myModal: MyModal;
 
 // API CLIENT
 const apiClient = new ApiClient();
@@ -29,7 +31,7 @@ async function main() {
     "frmRegistrarUser"
   ) as HTMLFormElement;
 
-  const myModal = new MyModal(
+  myModal = new MyModal(
     modalInstance,
     modalTitle!,
     btnRegistrar!,
@@ -57,20 +59,20 @@ async function main() {
       if (btn) {
         const id = btn.getAttribute("data-id");
         if (id) {
-          editUser(id, myModal); // Llamar a la función de edición
+          isUpdating = true;
+          id_usuario = id;
+          editUser(); // Llamar a la función de edición
         }
       }
     });
   });
 }
 
-function editUser(id: string, myModal: MyModal) {
-  console.log("hola mundo" + id);
+function editUser() {
   myModal.setTitle("Editar Usuario");
   myModal.setBtnDone("Actualizar Usuario");
   myModal.hideFields(document.getElementById("divClave")!);
   myModal.show();
-  myModal.setIdUser(id);
   // inputIdUser.value = id;
   // modalTitle !== null ? (modalTitle.innerText = "Editar Usuario") : "";
   // btnRegistrar !== null ? (btnRegistrar.innerText = "Actualizar Usuario") : "";
@@ -78,14 +80,10 @@ function editUser(id: string, myModal: MyModal) {
   // showModalRegister(modalInstance, "Editar Usuario");
 }
 
-async function submitFrmRegistrarUser(
-  e: Event,
-  mymodal: MyModal,
-  id_usuario?: string
-) {
+async function submitFrmRegistrarUser(e: Event) {
   e.preventDefault();
-  if (id_usuario) {
-    updateUser(id_usuario, mymodal);
+  if (isUpdating) {
+    updateUser();
     return;
   }
 
@@ -132,8 +130,8 @@ async function submitFrmRegistrarUser(
       }
 
       // Limpiar el formulario y ocultar el modal
-      mymodal.reset();
-      mymodal.hide();
+      myModal.reset();
+      myModal.hide();
       // simula redireccion
       history.pushState(null, "", `${base_url}Usuarios`);
     }
@@ -146,9 +144,11 @@ async function submitFrmRegistrarUser(
   }
 }
 
-async function updateUser(id: string, mymodal: MyModal): Promise<void> {
-  console.log("vamos a actualizar el usuario " + id);
-  mymodal.setIdUser("");
+async function updateUser(): Promise<void> {
+  console.log("vamos a actualizar el usuario " + id_usuario);
+
+  isUpdating = false;
+  id_usuario = "";
 }
 
 async function initDataTable(): Promise<DataTables.Api> {

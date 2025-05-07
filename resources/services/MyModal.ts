@@ -4,7 +4,6 @@ class MyModal {
   private title: HTMLElement;
   private btnDone: HTMLElement;
   private frmModal: HTMLFormElement;
-  private id_user: string;
   constructor(
     modal: Modal,
     title: HTMLElement,
@@ -15,15 +14,6 @@ class MyModal {
     this.title = title;
     this.btnDone = btnDone;
     this.frmModal = frmModal;
-    this.id_user = "";
-  }
-
-  public setIdUser(id_user: string) {
-    this.id_user = id_user;
-  }
-
-  public getIdUser(): string {
-    return this.id_user;
   }
 
   public setTitle(title: string) {
@@ -48,8 +38,10 @@ class MyModal {
       return;
     }
     element.classList.add("d-none");
-    document.getElementById("clave")?.removeAttribute("required");
-    document.getElementById("confirm_clave")?.removeAttribute("required");
+    const fields = element.querySelectorAll("[required]");
+    fields.forEach((field) => {
+      field.removeAttribute("required");
+    });
   }
 
   public showFields(element: HTMLElement) {
@@ -58,8 +50,8 @@ class MyModal {
       return;
     }
     element.classList.remove("d-none");
-    document.getElementById("clave")?.setAttribute("required", "");
-    document.getElementById("confirm_clave")?.setAttribute("required", "");
+    const fields = element.querySelectorAll("input, select, textarea");
+    fields.forEach((field) => field.setAttribute("required", "true"));
   }
 
   public show() {
@@ -75,15 +67,13 @@ class MyModal {
     this.frmModal.reset();
   }
 
-  public setSubmitAction(
-    callback: (event: Event, modal: MyModal, id: string) => void
-  ) {
+  public setSubmitAction(callback: (event: Event) => void) {
     if (!this.frmModal) {
       console.error("Form element is not defined.");
       return;
     }
     this.frmModal.addEventListener("submit", (e) => {
-      callback(e, this, this.id_user);
+      callback(e);
     });
   }
 }
