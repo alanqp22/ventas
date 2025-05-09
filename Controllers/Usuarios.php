@@ -26,6 +26,58 @@ class Usuarios extends Controller
     return;
   }
 
+  public function restaurar(int $id)
+  {
+    header('Content-Type: application/json; charset=utf-8');
+    if ($_SERVER['REQUEST_METHOD'] != "PUT") {
+      http_response_code(405); // Method Not Allowed
+      echo json_encode(['message' => 'Método no permitido'], JSON_UNESCAPED_UNICODE);
+      return;
+    }
+
+    if (!$this->model->getUserById($id)) {
+      http_response_code(409);
+      echo json_encode(['message' => 'El usuario no existe'], JSON_UNESCAPED_UNICODE);
+      return;
+    }
+
+    $result = $this->model->restaurarUsuario($id);
+
+    if ($result === "ok") {
+      http_response_code(200); // OK
+      echo json_encode(['status' => 'ok'], JSON_UNESCAPED_UNICODE);
+    } else {
+      http_response_code(500); // Internal Server Error
+      echo json_encode(['message' => 'Error al restaurar el usuario'], JSON_UNESCAPED_UNICODE);
+    }
+  }
+
+  public function eliminar(int $id)
+  {
+    header('Content-Type: application/json; charset=utf-8');
+    if ($_SERVER['REQUEST_METHOD'] != "DELETE") {
+      http_response_code(405); // Method Not Allowed
+      echo json_encode(['message' => 'Método no permitido'], JSON_UNESCAPED_UNICODE);
+      return;
+    }
+
+    if (!$this->model->getUserById($id)) {
+      http_response_code(409);
+      echo json_encode(['message' => 'El usuario no existe'], JSON_UNESCAPED_UNICODE);
+      return;
+    }
+
+    $result = $this->model->eliminarUsuario($id);
+
+    if ($result === "ok") {
+      http_response_code(200); // OK
+      echo json_encode(['status' => 'ok'], JSON_UNESCAPED_UNICODE);
+    } else {
+      http_response_code(500); // Internal Server Error
+      echo json_encode(['message' => 'Error al eliminar el usuario'], JSON_UNESCAPED_UNICODE);
+    }
+  }
+
   public function listar()
   {
     $data = $this->model->getUsuarios();
@@ -45,7 +97,7 @@ class Usuarios extends Controller
         $data[$i]["estado"] = '<span class="badge text-bg-danger">Inactivo</span>';
         $data[$i]["acciones"] = '';
         $data[$i]["acciones"] = <<<HTML
-          <button class="btn btn-success" data-id="$id">
+          <button class="btn btn-success btnRestoreUser" data-id="$id">
             <i class="fas fa-trash-can-arrow-up"></i>
           </button>
         HTML;

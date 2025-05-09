@@ -67,7 +67,11 @@ class ApiClient {
   }
 
   public delete(resource: string, id: string, headers = {}) {
-    return this.request(`${resource}.php?id=${id}`, "DELETE", null, headers);
+    return this.request(`${resource}${id}`, "DELETE", null, headers);
+  }
+
+  public restore(resource: string, id: string, headers = {}) {
+    return this.request(`${resource}${id}`, "PUT", null, headers);
   }
 }
 

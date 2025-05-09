@@ -6,7 +6,31 @@ class UsuariosModel extends Query
     parent::__construct();
   }
 
+  public function restaurarUsuario(int $id_usuario)
+  {
+    $sql = "update usuarios set usuario_estado=1 where id_usuario=?;";
+    $datos = array($id_usuario);
+    $data = $this->save($sql, $datos);
+    if ($data == 1) {
+      $res = "ok";
+    } else {
+      $res = "error";
+    }
+    return $res;
+  }
 
+  public function eliminarUsuario(int $id_usuario)
+  {
+    $sql = "update usuarios set usuario_estado=0 where id_usuario=?;";
+    $datos = array($id_usuario);
+    $data = $this->save($sql, $datos);
+    if ($data == 1) {
+      $res = "ok";
+    } else {
+      $res = "error";
+    }
+    return $res;
+  }
 
   public function verificarUsuario(string $nick)
   {

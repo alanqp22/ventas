@@ -55,13 +55,15 @@ async function main() {
 
   tblUsuarios = await initDataTable();
 
-  // Editar usuario
+  // Editar y eliminar usuario
   document.body.addEventListener("click", (e) => {
     // Encontramos el botón que fue clickeado, no importa si es el icono o el botón
     const target = e.target as HTMLElement;
 
     // Usamos closest para subir hasta el botón que contiene la clase 'btnEditarUser'
     const btn = target.closest(".btnEditarUser");
+    const btnDelete = target.closest(".btnDeleteUser");
+    const btnRestore = target.closest(".btnRestoreUser");
 
     if (btn) {
       const id = btn.getAttribute("data-id");
@@ -69,6 +71,79 @@ async function main() {
         id_usuario = id;
         editUser();
       }
+    } else if (btnDelete) {
+      const id = btnDelete.getAttribute("data-id");
+      if (id) {
+        id_usuario = id;
+        deleteUser();
+      }
+    } else if (btnRestore) {
+      const id = btnRestore.getAttribute("data-id");
+      if (id) {
+        id_usuario = id;
+        restoreUser();
+      }
+    }
+  });
+}
+
+function restoreUser() {
+  Swal.fire({
+    title: "¿Está seguro de que desea restaurar este usuario?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Sí, restaurar",
+    cancelButtonText: "Cancelar",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      apiClient
+        .restore("Usuarios/restaurar/", id_usuario)
+        .then((resp) => {
+          if (resp.status == "ok") {
+            Swal.fire({
+              icon: "success",
+              title: "Usuario restaurado con éxito",
+            });
+            reloadLayout();
+          }
+        })
+        .catch((error) => {
+          Swal.fire({
+            icon: "error",
+            title: (error as any).message || "Error",
+          });
+        });
+    }
+  });
+}
+
+function deleteUser() {
+  Swal.fire({
+    title: "¿Está seguro de que desea eliminar este usuario?",
+    text: "No podrá revertir esta acción",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Sí, eliminar",
+    cancelButtonText: "Cancelar",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      apiClient
+        .delete("Usuarios/eliminar/", id_usuario)
+        .then((resp) => {
+          if (resp.status == "ok") {
+            Swal.fire({
+              icon: "success",
+              title: "Usuario eliminado con éxito",
+            });
+            reloadLayout();
+          }
+        })
+        .catch((error) => {
+          Swal.fire({
+            icon: "error",
+            title: (error as any).message || "Error",
+          });
+        });
     }
   });
 }
