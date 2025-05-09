@@ -55,15 +55,15 @@ class ApiClient {
   }
 
   public getById(resource: string, id: string, headers = {}) {
-    return this.request(`${resource}.php?id=${id}`, "GET", null, headers);
+    return this.request(`${resource}${id}`, "GET", null, headers);
   }
 
   public async create(resource: string, data: any, headers = {}) {
     return await this.request(`${resource}`, "POST", data, headers);
   }
 
-  public update(resource: string, id: string, data: any, headers = {}) {
-    return this.request(`${resource}.php?id=${id}`, "PUT", data, headers);
+  public async update(resource: string, id: string, data: any, headers = {}) {
+    return await this.request(`${resource}${id}`, "PUT", data, headers);
   }
 
   public delete(resource: string, id: string, headers = {}) {

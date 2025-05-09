@@ -15,9 +15,15 @@ class Usuarios extends Controller
 
   public function editar(int $id)
   {
+    header('Content-Type: application/json; charset=utf-8');
     $data = $this->model->getUserById($id);
+    if (!$data) {
+      http_response_code(409);
+      echo json_encode(['message' => 'El usuario no existe'], JSON_UNESCAPED_UNICODE);
+      return;
+    }
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
-    die();
+    return;
   }
 
   public function listar()
@@ -73,6 +79,48 @@ class Usuarios extends Controller
     echo json_encode($msg, JSON_UNESCAPED_UNICODE);
   }
 
+  public function actualizar(int $id_usuario)
+  {
+    header('Content-Type: application/json; charset=utf-8');
+    if ($_SERVER['REQUEST_METHOD'] != "PUT") {
+      http_response_code(405); // Method Not Allowed
+      echo json_encode(['message' => 'Método no permitido'], JSON_UNESCAPED_UNICODE);
+      return;
+    }
+
+    $input = json_decode(file_get_contents("php://input"), true);
+
+    $required = ['nombre', 'nick', 'id_caja'];
+
+    foreach ($required as $field) {
+      if (empty($input[$field])) {
+        http_response_code(400); // Bad Request
+        echo json_encode(['message' => "El campo $field es obligatorio"], JSON_UNESCAPED_UNICODE);
+        return;
+      }
+    }
+
+    $nombre = trim(htmlspecialchars($input['nombre']));
+    $nick = trim(htmlspecialchars($input['nick']));
+    $id_caja = $input['id_caja'];
+
+    if (!$this->model->getUserById($id_usuario)) {
+      http_response_code(409);
+      echo json_encode(['message' => 'El usuario no existe'], JSON_UNESCAPED_UNICODE);
+      return;
+    }
+
+    $result = $this->model->actualizarUsuario($id_usuario, $nombre, $nick, $id_caja);
+
+    if ($result === "ok") {
+      http_response_code(201); // Created      
+      echo json_encode(['status' => 'ok'], JSON_UNESCAPED_UNICODE);
+    } else {
+      http_response_code(500); // Internal Server Error
+      echo json_encode(['message' => 'Error al registrar el usuario'], JSON_UNESCAPED_UNICODE);
+    }
+  }
+
   public function registrar()
   {
     header('Content-Type: application/json; charset=utf-8');
@@ -106,7 +154,7 @@ class Usuarios extends Controller
       return;
     }
 
-    if ($this->model->verificarUsuario($nick, $nombre)) {
+    if ($this->model->verificarUsuario($nick)) {
       http_response_code(409);
       echo json_encode(['message' => 'El usuario ya existe'], JSON_UNESCAPED_UNICODE);
       return;

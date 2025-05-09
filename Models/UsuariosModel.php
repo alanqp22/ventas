@@ -8,12 +8,13 @@ class UsuariosModel extends Query
 
 
 
-  public function verificarUsuario(string $nick, string $nombre)
+  public function verificarUsuario(string $nick)
   {
-    $sql = "select * from usuarios where nick='$nick' or nombre='$nombre';";
+    $sql = "select * from usuarios where nick='$nick';";
     $data = $this->select($sql);
     return $data;
   }
+
   public function getUserById(int $id_usuario)
   {
     $sql = "select * from usuarios where id_usuario='$id_usuario';";
@@ -46,6 +47,20 @@ class UsuariosModel extends Query
     $sql = "insert into usuarios (nombre, nick, clave, id_caja) values (?,?,?,?);";
     $datos = array($nombre, $nick, $clave, $id_caja);
     $data = $this->save($sql, $datos);
+    if ($data == 1) {
+      $res = "ok";
+    } else {
+      $res = "error";
+    }
+    return $res;
+  }
+
+  public function actualizarUsuario(int $id_usuario, string $nombre, string $nick, int $id_caja)
+  {
+    $sql = "update usuarios set nombre=?, nick=?, id_caja=? where id_usuario=?;";
+    $datos = array($nombre, $nick, $id_caja, $id_usuario);
+    $data = $this->save($sql, $datos);
+
     if ($data == 1) {
       $res = "ok";
     } else {

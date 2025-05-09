@@ -35,7 +35,6 @@ include "Views/Templates/header.php";
           <div class="row mb-3">
             <div class="col-8">
               <label for="nombre" class="form-label">Nombre</label>
-              <input type="hidden" name="id_usuario" id="id_usuario">
               <input type="text" name="nombre" id="nombre" placeholder="Nombre" class="form-control" maxlength="50" required>
             </div>
             <div class="col-4">

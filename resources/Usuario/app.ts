@@ -10,35 +10,43 @@ import MyModal from "../services/MyModal";
 
 declare const base_url: string;
 
-let btnDeleteUser = document.getElementById("btnDeleteUser");
-let inputIdUser = document.getElementById("id_usuario") as HTMLInputElement;
-let isUpdating = false;
 let id_usuario = "";
 let tblUsuarios: DataTables.Api;
 let myModal: MyModal;
+const apiClient = new ApiClient(base_url);
 
-// API CLIENT
-const apiClient = new ApiClient();
+// Elementos DOM del modal
+const modalNewUser = document.getElementById("mdl_new_user") as HTMLElement;
+let modalTitle = document.getElementById("modalTitle");
+let btnRegistrar = document.getElementById("btnRegistrarUser");
+let frmRegistrarUser = document.getElementById(
+  "frmRegistrarUser"
+) as HTMLFormElement;
+const nick = document.getElementById("nick") as HTMLInputElement;
+const name = document.getElementById("nombre") as HTMLInputElement;
+const clave = document.getElementById("clave") as HTMLInputElement;
+const confirm_clave = document.getElementById(
+  "confirm_clave"
+) as HTMLInputElement;
+let divClave = document.getElementById("divClave");
+const id_caja = document.getElementById("id_caja") as HTMLInputElement;
+
+// botón para abrir el modal
+let btnNewUser = document.getElementById("btnNewUser");
 
 async function main() {
-  // Modal
-  const modalNewUser = document.getElementById("mdl_new_user") as HTMLElement;
   const modalInstance = new Modal(modalNewUser);
-  let modalTitle = document.getElementById("modalTitle");
-  let btnRegistrar = document.getElementById("btnRegistrarUser");
-  let divClave = document.getElementById("divClave");
-  let frmRegistrarUser = document.getElementById(
-    "frmRegistrarUser"
-  ) as HTMLFormElement;
-
   myModal = new MyModal(
     modalInstance,
     modalTitle!,
     btnRegistrar!,
     frmRegistrarUser
   );
-  let btnNewUser = document.getElementById("btnNewUser");
-  btnNewUser?.addEventListener("click", () => myModal.show());
+  btnNewUser?.addEventListener("click", () => {
+    id_usuario = "";
+    myModal.showFields(divClave!);
+    myModal.show();
+  });
 
   myModal.setSubmitAction(submitFrmRegistrarUser);
   frmRegistrarUser?.addEventListener("submit", function (e) {
@@ -47,53 +55,52 @@ async function main() {
 
   tblUsuarios = await initDataTable();
 
-  // Editar y eliminar usuario
-  window.addEventListener("DOMContentLoaded", () => {
-    document.body.addEventListener("click", (e) => {
-      // Encontramos el botón que fue clickeado, no importa si es el icono o el botón
-      const target = e.target as HTMLElement;
+  // Editar usuario
+  document.body.addEventListener("click", (e) => {
+    // Encontramos el botón que fue clickeado, no importa si es el icono o el botón
+    const target = e.target as HTMLElement;
 
-      // Usamos closest para subir hasta el botón que contiene la clase 'btnEditarUser'
-      const btn = target.closest(".btnEditarUser");
+    // Usamos closest para subir hasta el botón que contiene la clase 'btnEditarUser'
+    const btn = target.closest(".btnEditarUser");
 
-      if (btn) {
-        const id = btn.getAttribute("data-id");
-        if (id) {
-          isUpdating = true;
-          id_usuario = id;
-          editUser(); // Llamar a la función de edición
-        }
+    if (btn) {
+      const id = btn.getAttribute("data-id");
+      if (id) {
+        id_usuario = id;
+        editUser();
       }
-    });
+    }
   });
 }
 
 function editUser() {
   myModal.setTitle("Editar Usuario");
   myModal.setBtnDone("Actualizar Usuario");
-  myModal.hideFields(document.getElementById("divClave")!);
+  myModal.hideFields(divClave!);
+
+  apiClient
+    .getById("Usuarios/editar/", id_usuario)
+    .then((resp) => {
+      nick.value = resp.nick;
+      name.value = resp.nombre;
+      id_caja.value = resp.id_caja;
+    })
+    .catch((error) => {
+      Swal.fire({
+        icon: "error",
+        title: (error as any).message || "Error",
+      });
+    });
   myModal.show();
-  // inputIdUser.value = id;
-  // modalTitle !== null ? (modalTitle.innerText = "Editar Usuario") : "";
-  // btnRegistrar !== null ? (btnRegistrar.innerText = "Actualizar Usuario") : "";
-  // divClave !== null ? divClave.classList.add("d-none") : "";
-  // showModalRegister(modalInstance, "Editar Usuario");
 }
 
 async function submitFrmRegistrarUser(e: Event) {
-  e.preventDefault();
-  if (isUpdating) {
-    updateUser();
+  if (id_usuario) {
+    updateUser(e);
     return;
   }
 
-  const nick = document.getElementById("nick") as HTMLInputElement;
-  const name = document.getElementById("nombre") as HTMLInputElement;
-  const clave = document.getElementById("clave") as HTMLInputElement;
-  const confirm_clave = document.getElementById(
-    "confirm_clave"
-  ) as HTMLInputElement;
-  const id_caja = document.getElementById("id_caja") as HTMLInputElement;
+  e.preventDefault();
 
   if (
     nick.value == "" ||
@@ -122,18 +129,7 @@ async function submitFrmRegistrarUser(e: Event) {
         icon: "success",
         title: "Usuario registrado con éxito",
       });
-
-      if (tblUsuarios) {
-        tblUsuarios.ajax.reload();
-      } else {
-        console.log("No se pudo recargar la tabla de usuarios");
-      }
-
-      // Limpiar el formulario y ocultar el modal
-      myModal.reset();
-      myModal.hide();
-      // simula redireccion
-      history.pushState(null, "", `${base_url}Usuarios`);
+      reloadLayout();
     }
   } catch (error) {
     Swal.fire({
@@ -144,23 +140,46 @@ async function submitFrmRegistrarUser(e: Event) {
   }
 }
 
-async function updateUser(): Promise<void> {
-  console.log("vamos a actualizar el usuario " + id_usuario);
+async function updateUser(e: Event): Promise<void> {
+  e.preventDefault();
 
-  isUpdating = false;
-  id_usuario = "";
+  try {
+    const resp = await apiClient.update("Usuarios/actualizar/", id_usuario, {
+      nick: nick.value,
+      nombre: name.value,
+      id_caja: id_caja.value,
+    });
+    if (resp.status == "ok") {
+      Swal.fire({
+        icon: "success",
+        title: "Usuario actualizado con éxito",
+      });
+      reloadLayout();
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: (error as any).message || "Error",
+      text: "Por favor, inténtelo de nuevo más tarde.",
+    });
+  }
+}
+
+function reloadLayout() {
+  if (tblUsuarios) {
+    tblUsuarios.ajax.reload();
+  } else {
+    console.log("No se pudo recargar la tabla de usuarios");
+  }
+
+  // Limpiar el formulario y ocultar el modal
+  myModal.reset();
+  myModal.hide();
+  // simula redireccion
+  history.pushState(null, "", `${base_url}Usuarios`);
 }
 
 async function initDataTable(): Promise<DataTables.Api> {
-  // Espera a que el DOM esté listo
-  await new Promise<void>((resolve) => {
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", () => resolve());
-    } else {
-      resolve();
-    }
-  });
-
   // Inicializa DataTable
   const tblUsuarios = $("#tblUsuarios").DataTable({
     language: {
@@ -188,4 +207,6 @@ async function initDataTable(): Promise<DataTables.Api> {
   return tblUsuarios;
 }
 
-main();
+document.addEventListener("DOMContentLoaded", () => {
+  main();
+});
