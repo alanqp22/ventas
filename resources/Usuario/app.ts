@@ -255,7 +255,6 @@ function reloadLayout() {
 }
 
 async function initDataTable(): Promise<DataTables.Api> {
-  // Inicializa DataTable
   const tblUsuarios = $("#tblUsuarios").DataTable({
     language: {
       infoEmpty: "Ningún registro disponible",
