@@ -1,24 +1,21 @@
-import ApiClient from "../services/ApiClient";
-
-import Swal from "sweetalert2";
-import $ from "jquery";
-import "datatables.net";
-import "datatables.net-dt/css/dataTables.dataTables.min.css";
-import "bootstrap";
-import { Modal } from "bootstrap";
 import MyModal from "../services/MyModal";
-
+import MyTable from "../services/MyTable";
+import ApiClient from "../services/ApiClient";
+import MyAlert from "../services/MyAlert";
+import {
+  validateFields,
+  getErrorMessage,
+  actionsEvents,
+} from "../services/functions";
 declare const base_url: string;
-
-let id_usuario = "";
-let tblUsuarios: DataTables.Api;
 let myModal: MyModal;
 const apiClient = new ApiClient(base_url);
+let tbl_usuarios: MyTable;
 
 // Elementos DOM del modal
 const modalNewUser = document.getElementById("mdl_new_user") as HTMLElement;
-let modalTitle = document.getElementById("modalTitle");
-let btnRegistrar = document.getElementById("btnRegistrarUser");
+const modalTitle = document.getElementById("modalTitle")!;
+const btnRegistrar = document.getElementById("btnRegistrarUser")!;
 let frmRegistrarUser = document.getElementById(
   "frmRegistrarUser"
 ) as HTMLFormElement;
@@ -28,166 +25,110 @@ const clave = document.getElementById("clave") as HTMLInputElement;
 const confirm_clave = document.getElementById(
   "confirm_clave"
 ) as HTMLInputElement;
-let divClave = document.getElementById("divClave");
+const divClave = document.getElementById("divClave")!;
 const id_caja = document.getElementById("id_caja") as HTMLInputElement;
 
 // botón para abrir el modal
-let btnNewUser = document.getElementById("btnNewUser");
+const btnNewUser = document.getElementById("btnNewUser")!;
 
 async function main() {
-  const modalInstance = new Modal(modalNewUser);
+  tbl_usuarios = new MyTable(base_url, "Usuarios/listar", "tblUsuarios", [
+    "id_usuario",
+    "nick",
+    "nombre",
+    "caja",
+    "estado",
+    "acciones",
+  ]);
+
   myModal = new MyModal(
-    modalInstance,
-    modalTitle!,
-    btnRegistrar!,
+    modalNewUser,
+    modalTitle,
+    btnRegistrar,
     frmRegistrarUser
   );
   btnNewUser?.addEventListener("click", () => {
-    id_usuario = "";
-    myModal.showFields(divClave!);
+    myModal.setSelectedID(null);
+    myModal.showFields(divClave);
     myModal.show();
   });
 
-  myModal.setSubmitAction(submitFrmRegistrarUser);
-  frmRegistrarUser?.addEventListener("submit", function (e) {
-    e.preventDefault();
-  });
+  myModal.setSubmitAction(() => registerUser(myModal.getSelectedID()));
 
-  tblUsuarios = await initDataTable();
-
-  // Editar y eliminar usuario
-  document.body.addEventListener("click", (e) => {
-    // Encontramos el botón que fue clickeado, no importa si es el icono o el botón
-    const target = e.target as HTMLElement;
-
-    // Usamos closest para subir hasta el botón que contiene la clase 'btnEditarUser'
-    const btn = target.closest(".btnEditarUser");
-    const btnDelete = target.closest(".btnDeleteUser");
-    const btnRestore = target.closest(".btnRestoreUser");
-
-    if (btn) {
-      const id = btn.getAttribute("data-id");
-      if (id) {
-        id_usuario = id;
-        editUser();
-      }
-    } else if (btnDelete) {
-      const id = btnDelete.getAttribute("data-id");
-      if (id) {
-        id_usuario = id;
-        deleteUser();
-      }
-    } else if (btnRestore) {
-      const id = btnRestore.getAttribute("data-id");
-      if (id) {
-        id_usuario = id;
-        restoreUser();
-      }
-    }
+  // enlazar eventos a los botones de acciones
+  actionsEvents(editUser, deleteUser, restoreUser, (id: string) => {
+    myModal.setSelectedID(id);
   });
 }
 
-function restoreUser() {
-  Swal.fire({
-    title: "¿Está seguro de que desea restaurar este usuario?",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Sí, restaurar",
-    cancelButtonText: "Cancelar",
-  }).then((result) => {
-    if (result.isConfirmed) {
+function restoreUser(id: string) {
+  MyAlert.alertWarningDialog(
+    "¿Está seguro de que desea restaurar este usuario?",
+    "",
+    "Sí, restaurar",
+    () => {
       apiClient
-        .restore("Usuarios/restaurar/", id_usuario)
+        .restore("Usuarios/restaurar/", id)
         .then((resp) => {
           if (resp.status == "ok") {
-            Swal.fire({
-              icon: "success",
-              title: "Usuario restaurado con éxito",
-            });
+            MyAlert.alertSuccess("Usuario restaurado con éxito");
             reloadLayout();
           }
         })
         .catch((error) => {
-          Swal.fire({
-            icon: "error",
-            title: (error as any).message || "Error",
-          });
+          MyAlert.alertError(getErrorMessage(error));
         });
     }
-  });
+  );
 }
 
-function deleteUser() {
-  Swal.fire({
-    title: "¿Está seguro de que desea eliminar este usuario?",
-    text: "No podrá revertir esta acción",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Sí, eliminar",
-    cancelButtonText: "Cancelar",
-  }).then((result) => {
-    if (result.isConfirmed) {
+function deleteUser(id: string) {
+  MyAlert.alertWarningDialog(
+    "¿Está seguro de que desea eliminar este usuario?",
+    "No podrá revertir esta acción",
+    "Sí, eliminar",
+    () => {
       apiClient
-        .delete("Usuarios/eliminar/", id_usuario)
+        .delete("Usuarios/eliminar/", id)
         .then((resp) => {
           if (resp.status == "ok") {
-            Swal.fire({
-              icon: "success",
-              title: "Usuario eliminado con éxito",
-            });
+            MyAlert.alertSuccess("Usuario eliminado con éxito");
             reloadLayout();
           }
         })
         .catch((error) => {
-          Swal.fire({
-            icon: "error",
-            title: (error as any).message || "Error",
-          });
+          MyAlert.alertError(getErrorMessage(error));
         });
     }
-  });
+  );
 }
 
-function editUser() {
+function editUser(id: string) {
   myModal.setTitle("Editar Usuario");
   myModal.setBtnDone("Actualizar Usuario");
-  myModal.hideFields(divClave!);
+  myModal.hideFields(divClave);
 
   apiClient
-    .getById("Usuarios/editar/", id_usuario)
+    .getById("Usuarios/editar/", id)
     .then((resp) => {
       nick.value = resp.nick;
       name.value = resp.nombre;
       id_caja.value = resp.id_caja;
     })
     .catch((error) => {
-      Swal.fire({
-        icon: "error",
-        title: (error as any).message || "Error",
-      });
+      MyAlert.alertError(getErrorMessage(error));
     });
   myModal.show();
 }
 
-async function submitFrmRegistrarUser(e: Event) {
-  if (id_usuario) {
-    updateUser(e);
+async function registerUser(id: string | null) {
+  if (id) {
+    updateUser(id);
     return;
   }
 
-  e.preventDefault();
-
-  if (
-    nick.value == "" ||
-    name.value == "" ||
-    clave.value == "" ||
-    confirm_clave.value == "" ||
-    id_caja.value == ""
-  ) {
-    Swal.fire({
-      icon: "error",
-      title: "Todos los campos son obligatorios",
-    });
+  if (!validateFields([nick, name, clave, confirm_clave, id_caja])) {
+    MyAlert.alertWarning("Todos los campos son obligatorios");
     return;
   }
 
@@ -200,86 +141,40 @@ async function submitFrmRegistrarUser(e: Event) {
       id_caja: id_caja.value,
     });
     if (resp.status == "ok") {
-      Swal.fire({
-        icon: "success",
-        title: "Usuario registrado con éxito",
-      });
+      MyAlert.alertSuccess("Usuario registrado con éxito");
       reloadLayout();
     }
   } catch (error) {
-    Swal.fire({
-      icon: "error",
-      title: (error as any).message || "Error",
-      text: "Por favor, inténtelo de nuevo más tarde.",
-    });
+    MyAlert.alertError(getErrorMessage(error));
   }
 }
 
-async function updateUser(e: Event): Promise<void> {
-  e.preventDefault();
-
+async function updateUser(id: string): Promise<void> {
+  if (!validateFields([nick, name, id_caja])) {
+    MyAlert.alertWarning("Todos los campos son obligatorios");
+    return;
+  }
   try {
-    const resp = await apiClient.update("Usuarios/actualizar/", id_usuario, {
+    const resp = await apiClient.update("Usuarios/actualizar/", id, {
       nick: nick.value,
       nombre: name.value,
       id_caja: id_caja.value,
     });
     if (resp.status == "ok") {
-      Swal.fire({
-        icon: "success",
-        title: "Usuario actualizado con éxito",
-      });
+      MyAlert.alertSuccess("Usuario actualizado con éxito");
       reloadLayout();
     }
   } catch (error) {
-    Swal.fire({
-      icon: "error",
-      title: (error as any).message || "Error",
-      text: "Por favor, inténtelo de nuevo más tarde.",
-    });
+    MyAlert.alertError(getErrorMessage(error));
   }
 }
 
 function reloadLayout() {
-  if (tblUsuarios) {
-    tblUsuarios.ajax.reload();
-  } else {
-    console.log("No se pudo recargar la tabla de usuarios");
-  }
-
-  // Limpiar el formulario y ocultar el modal
+  tbl_usuarios.reload();
   myModal.reset();
   myModal.hide();
   // simula redireccion
   history.pushState(null, "", `${base_url}Usuarios`);
-}
-
-async function initDataTable(): Promise<DataTables.Api> {
-  // Inicializa DataTable
-  const tblUsuarios = $("#tblUsuarios").DataTable({
-    language: {
-      infoEmpty: "Ningún registro disponible",
-      info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
-      lengthMenu: "_MENU_ &nbsp;&nbsp;registros por página",
-      search: "Buscar:&nbsp;",
-      zeroRecords: "No se encontraron resultados",
-      infoFiltered: "(filtrado de _MAX_ registros totales)",
-    },
-    ajax: {
-      url: `${base_url}Usuarios/listar`,
-      dataSrc: "",
-    },
-    columns: [
-      { data: "id_usuario" },
-      { data: "nick" },
-      { data: "nombre" },
-      { data: "caja" },
-      { data: "estado" },
-      { data: "acciones" },
-    ],
-  });
-
-  return tblUsuarios;
 }
 
 document.addEventListener("DOMContentLoaded", () => {

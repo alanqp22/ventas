@@ -86,10 +86,10 @@ class Usuarios extends Controller
       if ($data[$i]["usuario_estado"] == 1) {
         $data[$i]["estado"] = '<span class="badge text-bg-primary">Activo</span>';
         $data[$i]["acciones"] = <<<HTML
-          <button class="btn btn-primary btnEditarUser" data-id="$id">
+          <button class="btn btn-primary" data-action="edit" data-id="$id">
             <i class="fas fa-edit"></i>
           </button>
-          <button class="btn btn-danger btnDeleteUser" data-id="$id">
+          <button class="btn btn-danger" data-action="delete" data-id="$id">
             <i class="fas fa-trash"></i>
           </button>
         HTML;
@@ -97,7 +97,7 @@ class Usuarios extends Controller
         $data[$i]["estado"] = '<span class="badge text-bg-danger">Inactivo</span>';
         $data[$i]["acciones"] = '';
         $data[$i]["acciones"] = <<<HTML
-          <button class="btn btn-success btnRestoreUser" data-id="$id">
+          <button class="btn btn-success" data-action="restore" data-id="$id">
             <i class="fas fa-trash-can-arrow-up"></i>
           </button>
         HTML;

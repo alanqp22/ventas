@@ -1,19 +1,31 @@
+import "bootstrap";
 import { Modal } from "bootstrap";
+
 class MyModal {
   private modal: Modal;
   private title: HTMLElement;
   private btnDone: HTMLElement;
   private frmModal: HTMLFormElement;
+  private selectedID: string | null;
   constructor(
-    modal: Modal,
+    modalHtml: HTMLElement,
     title: HTMLElement,
     btnDone: HTMLElement,
     frmModal: HTMLFormElement
   ) {
-    this.modal = modal;
+    this.modal = new Modal(modalHtml);
     this.title = title;
     this.btnDone = btnDone;
     this.frmModal = frmModal;
+    this.selectedID = null;
+  }
+
+  public setSelectedID(id: string | null) {
+    this.selectedID = id;
+  }
+
+  public getSelectedID(): string | null {
+    return this.selectedID;
   }
 
   public setTitle(title: string) {
@@ -67,14 +79,23 @@ class MyModal {
     this.frmModal.reset();
   }
 
-  public setSubmitAction(callback: (event: Event) => void) {
+  private currentSubmitCallback?: (e: Event) => void;
+
+  public setSubmitAction(callback: () => void) {
     if (!this.frmModal) {
       console.error("Form element is not defined.");
       return;
     }
-    this.frmModal.addEventListener("submit", (e) => {
-      callback(e);
-    });
+
+    if (this.currentSubmitCallback) {
+      this.frmModal.removeEventListener("submit", this.currentSubmitCallback);
+    }
+
+    this.currentSubmitCallback = (e) => {
+      e.preventDefault();
+      callback();
+    };
+    this.frmModal.addEventListener("submit", this.currentSubmitCallback);
   }
 }
 
