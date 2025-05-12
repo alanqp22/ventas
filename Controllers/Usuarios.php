@@ -10,72 +10,8 @@ class Usuarios extends Controller
   public function index()
   {
     $data['cajas'] = $this->model->getCajas();
+    $data['resources'] = "Usuarios/app";
     $this->views->getView($this, "index", $data);
-  }
-
-  public function editar(int $id)
-  {
-    header('Content-Type: application/json; charset=utf-8');
-    $data = $this->model->getUserById($id);
-    if (!$data) {
-      http_response_code(409);
-      echo json_encode(['message' => 'El usuario no existe'], JSON_UNESCAPED_UNICODE);
-      return;
-    }
-    echo json_encode($data, JSON_UNESCAPED_UNICODE);
-    return;
-  }
-
-  public function restaurar(int $id)
-  {
-    header('Content-Type: application/json; charset=utf-8');
-    if ($_SERVER['REQUEST_METHOD'] != "PUT") {
-      http_response_code(405); // Method Not Allowed
-      echo json_encode(['message' => 'Método no permitido'], JSON_UNESCAPED_UNICODE);
-      return;
-    }
-
-    if (!$this->model->getUserById($id)) {
-      http_response_code(409);
-      echo json_encode(['message' => 'El usuario no existe'], JSON_UNESCAPED_UNICODE);
-      return;
-    }
-
-    $result = $this->model->restaurarUsuario($id);
-
-    if ($result === "ok") {
-      http_response_code(200); // OK
-      echo json_encode(['status' => 'ok'], JSON_UNESCAPED_UNICODE);
-    } else {
-      http_response_code(500); // Internal Server Error
-      echo json_encode(['message' => 'Error al restaurar el usuario'], JSON_UNESCAPED_UNICODE);
-    }
-  }
-
-  public function eliminar(int $id)
-  {
-    header('Content-Type: application/json; charset=utf-8');
-    if ($_SERVER['REQUEST_METHOD'] != "DELETE") {
-      http_response_code(405); // Method Not Allowed
-      echo json_encode(['message' => 'Método no permitido'], JSON_UNESCAPED_UNICODE);
-      return;
-    }
-
-    if (!$this->model->getUserById($id)) {
-      http_response_code(409);
-      echo json_encode(['message' => 'El usuario no existe'], JSON_UNESCAPED_UNICODE);
-      return;
-    }
-
-    $result = $this->model->eliminarUsuario($id);
-
-    if ($result === "ok") {
-      http_response_code(200); // OK
-      echo json_encode(['status' => 'ok'], JSON_UNESCAPED_UNICODE);
-    } else {
-      http_response_code(500); // Internal Server Error
-      echo json_encode(['message' => 'Error al eliminar el usuario'], JSON_UNESCAPED_UNICODE);
-    }
   }
 
   public function listar()
@@ -104,8 +40,65 @@ class Usuarios extends Controller
       }
     }
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
-    die();
   }
+
+  public function editar(int $id)
+  {
+    header('Content-Type: application/json; charset=utf-8');
+    $data = $this->model->getUsuarioById($id);
+    if (!$data) {
+      http_response_code(409);
+      echo json_encode(['message' => 'El usuario no existe'], JSON_UNESCAPED_UNICODE);
+      return;
+    }
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    return;
+  }
+
+  public function restaurar(int $id)
+  {
+    header('Content-Type: application/json; charset=utf-8');
+    if (!$this->validateMethod("PUT")) return;
+    if (!$this->model->getUsuarioById($id)) {
+      http_response_code(409);
+      echo json_encode(['message' => 'El usuario no existe'], JSON_UNESCAPED_UNICODE);
+      return;
+    }
+
+    $result = $this->model->restaurarUsuario($id);
+
+    if ($result === "ok") {
+      http_response_code(200); // OK
+      echo json_encode(['status' => 'ok'], JSON_UNESCAPED_UNICODE);
+    } else {
+      http_response_code(500); // Internal Server Error
+      echo json_encode(['message' => 'Error al restaurar el usuario'], JSON_UNESCAPED_UNICODE);
+    }
+  }
+
+  public function eliminar(int $id)
+  {
+    header('Content-Type: application/json; charset=utf-8');
+    if (!$this->validateMethod("DELETE")) return;
+
+    if (!$this->model->getUsuarioById($id)) {
+      http_response_code(409);
+      echo json_encode(['message' => 'El usuario no existe'], JSON_UNESCAPED_UNICODE);
+      return;
+    }
+
+    $result = $this->model->eliminarUsuario($id);
+
+    if ($result === "ok") {
+      http_response_code(200); // OK
+      echo json_encode(['status' => 'ok'], JSON_UNESCAPED_UNICODE);
+    } else {
+      http_response_code(500); // Internal Server Error
+      echo json_encode(['message' => 'Error al eliminar el usuario'], JSON_UNESCAPED_UNICODE);
+    }
+  }
+
+
 
   // Valida los datos del formulario de login
   public function validar()
@@ -133,12 +126,8 @@ class Usuarios extends Controller
 
   public function actualizar(int $id_usuario)
   {
+    if (!$this->validateMethod("PUT")) return;
     header('Content-Type: application/json; charset=utf-8');
-    if ($_SERVER['REQUEST_METHOD'] != "PUT") {
-      http_response_code(405); // Method Not Allowed
-      echo json_encode(['message' => 'Método no permitido'], JSON_UNESCAPED_UNICODE);
-      return;
-    }
 
     $input = json_decode(file_get_contents("php://input"), true);
 
@@ -156,7 +145,7 @@ class Usuarios extends Controller
     $nick = trim(htmlspecialchars($input['nick']));
     $id_caja = $input['id_caja'];
 
-    if (!$this->model->getUserById($id_usuario)) {
+    if (!$this->model->getUsuarioById($id_usuario)) {
       http_response_code(409);
       echo json_encode(['message' => 'El usuario no existe'], JSON_UNESCAPED_UNICODE);
       return;
@@ -175,12 +164,8 @@ class Usuarios extends Controller
 
   public function registrar()
   {
+    if (!$this->validateMethod("POST")) return;
     header('Content-Type: application/json; charset=utf-8');
-    if ($_SERVER['REQUEST_METHOD'] != "POST") {
-      http_response_code(405); // Method Not Allowed
-      echo json_encode(['message' => 'Método no permitido'], JSON_UNESCAPED_UNICODE);
-      return;
-    }
 
     $input = json_decode(file_get_contents("php://input"), true);
 
@@ -222,5 +207,15 @@ class Usuarios extends Controller
       http_response_code(500); // Internal Server Error
       echo json_encode(['message' => 'Error al registrar el usuario'], JSON_UNESCAPED_UNICODE);
     }
+  }
+
+  private function validateMethod(string $expectedMethod)
+  {
+    if ($_SERVER['REQUEST_METHOD'] != $expectedMethod) {
+      http_response_code(405); // Method Not Allowed
+      echo json_encode(['message' => 'Método no permitido'], JSON_UNESCAPED_UNICODE);
+      return false;
+    }
+    return true;
   }
 }

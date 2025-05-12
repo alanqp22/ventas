@@ -20,7 +20,7 @@ require_once __DIR__ . "/Vite.php";
     <script src="<?= base_url ?>Assets/js/fontawesome.all.js"></script>
 
     <?php
-    vite('Usuario/app'); // O caja/app, etc. 
+    vite($params['resources']); // Usuarios/app, Cajas/app, etc. 
     ?>
 
 </head>
