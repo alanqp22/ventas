@@ -10,13 +10,42 @@ class Usuarios extends Controller
   public function index()
   {
     $data['cajas'] = $this->model->getCajas();
+    $data['resources'] = "Usuarios/app";
     $this->views->getView($this, "index", $data);
+  }
+
+  public function listar()
+  {
+    $data = $this->model->getUsuarios();
+    for ($i = 0; $i < count($data); $i++) {
+      $id = (int)$data[$i]["id_usuario"];
+      if ($data[$i]["usuario_estado"] == 1) {
+        $data[$i]["estado"] = '<span class="badge text-bg-primary">Activo</span>';
+        $data[$i]["acciones"] = <<<HTML
+          <button class="btn btn-primary" data-action="edit" data-id="$id">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="btn btn-danger" data-action="delete" data-id="$id">
+            <i class="fas fa-trash"></i>
+          </button>
+        HTML;
+      } else {
+        $data[$i]["estado"] = '<span class="badge text-bg-danger">Inactivo</span>';
+        $data[$i]["acciones"] = '';
+        $data[$i]["acciones"] = <<<HTML
+          <button class="btn btn-success" data-action="restore" data-id="$id">
+            <i class="fas fa-trash-can-arrow-up"></i>
+          </button>
+        HTML;
+      }
+    }
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
   }
 
   public function editar(int $id)
   {
     header('Content-Type: application/json; charset=utf-8');
-    $data = $this->model->getUserById($id);
+    $data = $this->model->getUsuarioById($id);
     if (!$data) {
       http_response_code(409);
       echo json_encode(['message' => 'El usuario no existe'], JSON_UNESCAPED_UNICODE);
@@ -29,13 +58,8 @@ class Usuarios extends Controller
   public function restaurar(int $id)
   {
     header('Content-Type: application/json; charset=utf-8');
-    if ($_SERVER['REQUEST_METHOD'] != "PUT") {
-      http_response_code(405); // Method Not Allowed
-      echo json_encode(['message' => 'Método no permitido'], JSON_UNESCAPED_UNICODE);
-      return;
-    }
-
-    if (!$this->model->getUserById($id)) {
+    if (!$this->validateMethod("PUT")) return;
+    if (!$this->model->getUsuarioById($id)) {
       http_response_code(409);
       echo json_encode(['message' => 'El usuario no existe'], JSON_UNESCAPED_UNICODE);
       return;
@@ -55,13 +79,9 @@ class Usuarios extends Controller
   public function eliminar(int $id)
   {
     header('Content-Type: application/json; charset=utf-8');
-    if ($_SERVER['REQUEST_METHOD'] != "DELETE") {
-      http_response_code(405); // Method Not Allowed
-      echo json_encode(['message' => 'Método no permitido'], JSON_UNESCAPED_UNICODE);
-      return;
-    }
+    if (!$this->validateMethod("DELETE")) return;
 
-    if (!$this->model->getUserById($id)) {
+    if (!$this->model->getUsuarioById($id)) {
       http_response_code(409);
       echo json_encode(['message' => 'El usuario no existe'], JSON_UNESCAPED_UNICODE);
       return;
@@ -78,34 +98,7 @@ class Usuarios extends Controller
     }
   }
 
-  public function listar()
-  {
-    $data = $this->model->getUsuarios();
-    for ($i = 0; $i < count($data); $i++) {
-      $id = (int)$data[$i]["id_usuario"];
-      if ($data[$i]["usuario_estado"] == 1) {
-        $data[$i]["estado"] = '<span class="badge text-bg-primary">Activo</span>';
-        $data[$i]["acciones"] = <<<HTML
-          <button class="btn btn-primary btnEditarUser" data-id="$id">
-            <i class="fas fa-edit"></i>
-          </button>
-          <button class="btn btn-danger btnDeleteUser" data-id="$id">
-            <i class="fas fa-trash"></i>
-          </button>
-        HTML;
-      } else {
-        $data[$i]["estado"] = '<span class="badge text-bg-danger">Inactivo</span>';
-        $data[$i]["acciones"] = '';
-        $data[$i]["acciones"] = <<<HTML
-          <button class="btn btn-success btnRestoreUser" data-id="$id">
-            <i class="fas fa-trash-can-arrow-up"></i>
-          </button>
-        HTML;
-      }
-    }
-    echo json_encode($data, JSON_UNESCAPED_UNICODE);
-    die();
-  }
+
 
   // Valida los datos del formulario de login
   public function validar()
@@ -133,12 +126,8 @@ class Usuarios extends Controller
 
   public function actualizar(int $id_usuario)
   {
+    if (!$this->validateMethod("PUT")) return;
     header('Content-Type: application/json; charset=utf-8');
-    if ($_SERVER['REQUEST_METHOD'] != "PUT") {
-      http_response_code(405); // Method Not Allowed
-      echo json_encode(['message' => 'Método no permitido'], JSON_UNESCAPED_UNICODE);
-      return;
-    }
 
     $input = json_decode(file_get_contents("php://input"), true);
 
@@ -156,7 +145,7 @@ class Usuarios extends Controller
     $nick = trim(htmlspecialchars($input['nick']));
     $id_caja = $input['id_caja'];
 
-    if (!$this->model->getUserById($id_usuario)) {
+    if (!$this->model->getUsuarioById($id_usuario)) {
       http_response_code(409);
       echo json_encode(['message' => 'El usuario no existe'], JSON_UNESCAPED_UNICODE);
       return;
@@ -175,12 +164,8 @@ class Usuarios extends Controller
 
   public function registrar()
   {
+    if (!$this->validateMethod("POST")) return;
     header('Content-Type: application/json; charset=utf-8');
-    if ($_SERVER['REQUEST_METHOD'] != "POST") {
-      http_response_code(405); // Method Not Allowed
-      echo json_encode(['message' => 'Método no permitido'], JSON_UNESCAPED_UNICODE);
-      return;
-    }
 
     $input = json_decode(file_get_contents("php://input"), true);
 
@@ -222,5 +207,15 @@ class Usuarios extends Controller
       http_response_code(500); // Internal Server Error
       echo json_encode(['message' => 'Error al registrar el usuario'], JSON_UNESCAPED_UNICODE);
     }
+  }
+
+  private function validateMethod(string $expectedMethod)
+  {
+    if ($_SERVER['REQUEST_METHOD'] != $expectedMethod) {
+      http_response_code(405); // Method Not Allowed
+      echo json_encode(['message' => 'Método no permitido'], JSON_UNESCAPED_UNICODE);
+      return false;
+    }
+    return true;
   }
 }

@@ -60,7 +60,7 @@ include "Views/Templates/header.php";
                 <?php
                 foreach ($params['cajas'] as $caja) {
                 ?>
-                  <option value="<?= $caja['id_caja'] ?>"><?= $caja['caja'] ?></option>
+                  <option value="<?= $caja['id_caja'] ?>"><?= $caja['nombre'] ?></option>
                 <?php
                 };
                 ?>

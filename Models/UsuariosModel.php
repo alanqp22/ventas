@@ -39,7 +39,7 @@ class UsuariosModel extends Query
     return $data;
   }
 
-  public function getUserById(int $id_usuario)
+  public function getUsuarioById(int $id_usuario)
   {
     $sql = "select * from usuarios where id_usuario='$id_usuario';";
     $data = $this->select($sql);
@@ -54,14 +54,14 @@ class UsuariosModel extends Query
   }
   public function getUsuarios()
   {
-    $sql = "select u.*, c.id_caja, c.caja from usuarios u inner join caja c on c.id_caja = u.id_caja;";
+    $sql = "select u.*, c.id_caja, c.nombre as caja from usuarios u inner join cajas c on c.id_caja = u.id_caja;";
     $data = $this->selectAll($sql);
     return $data;
   }
 
   public function getCajas()
   {
-    $sql = "select * from caja where caja_estado=1;";
+    $sql = "select * from cajas where caja_estado=1;";
     $data = $this->selectAll($sql);
     return $data;
   }
