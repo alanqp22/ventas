@@ -11,7 +11,7 @@ include "Views/Templates/header.php";
 <table class="table" id="tblUsuarios">
   <thead>
     <tr>
-      <th>Id</th>
+      <th></th>
       <th>Usuario</th>
       <th>Nombre</th>
       <th>Caja</th>

@@ -11,7 +11,9 @@ class MyTable {
     idTable: string,
     campos: string[]
   ) {
-    this.myDataTable = $(`#${idTable}`).DataTable({
+    const table = $(`#${idTable}`).DataTable({
+      order: [],
+      pageLength: 5,
       language: {
         infoEmpty: "Ningún registro disponible",
         info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
@@ -25,7 +27,26 @@ class MyTable {
         dataSrc: "",
       },
       columns: this.getCols(campos),
+      columnDefs: [
+        {
+          searchable: false,
+          orderable: false,
+          targets: 0,
+        },
+      ],
     });
+
+    table
+      .on("order.dt search.dt", function () {
+        let i = 1;
+        table
+          .cells(null, 0, { search: "applied", order: "applied" })
+          .every(function (cell) {
+            this.data(i++);
+          });
+      })
+      .draw();
+    this.myDataTable = table;
   }
 
   private getCols(campos: string[]) {

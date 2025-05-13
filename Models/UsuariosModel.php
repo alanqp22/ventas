@@ -54,7 +54,7 @@ class UsuariosModel extends Query
   }
   public function getUsuarios()
   {
-    $sql = "select u.*, c.id_caja, c.nombre as caja from usuarios u inner join cajas c on c.id_caja = u.id_caja;";
+    $sql = "select u.usuario_estado, u.nombre, u.nick, u.id_usuario, c.id_caja, c.nombre as caja from usuarios u inner join cajas c on c.id_caja = u.id_caja ORDER BY u.usuario_estado DESC;";
     $data = $this->selectAll($sql);
     return $data;
   }

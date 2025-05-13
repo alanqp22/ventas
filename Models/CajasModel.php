@@ -48,7 +48,7 @@ class CajasModel extends Query
 
   public function getCajas()
   {
-    $sql = "select * from cajas;";
+    $sql = "select * from cajas ORDER BY caja_estado DESC;";
     $data = $this->selectAll($sql);
     return $data;
   }

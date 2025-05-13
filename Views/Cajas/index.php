@@ -11,7 +11,7 @@ include "Views/Templates/header.php";
 <table class="table" id="tblCajas">
   <thead>
     <tr>
-      <th>Id</th>
+      <th></th>
       <th>Nombre</th>
       <th>Estado</th>
       <th>Acciones</th>
@@ -31,9 +31,9 @@ include "Views/Templates/header.php";
         <div class="modal-body">
 
           <div class="row mb-3">
-            <div class="col-8">
-              <label for="nombre" class="form-label">Nombre</label>
-              <input type="text" name="nombre" id="nombre" placeholder="Nombre" class="form-control" maxlength="50" required>
+            <div class="col">
+              <label for="nombre" class="form-label">Nombre de caja</label>
+              <input type="text" name="nombre" id="nombre" placeholder="Nombre de caja" class="form-control" maxlength="50" required>
             </div>
           </div>
 
