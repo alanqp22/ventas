@@ -58,7 +58,7 @@ require_once __DIR__ . "/Vite.php";
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <div class="sb-sidenav-menu-heading">Interface</div>
+                        <div class="sb-sidenav-menu-heading">Administración</div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-tools"></i></div>
                             Configuración
@@ -70,6 +70,7 @@ require_once __DIR__ . "/Vite.php";
                                 <a class="nav-link" href="<?= base_url ?>Cajas"><i class="fas fa-box me-2"></i> Cajas</a>
                             </nav>
                         </div>
+                        <a class="nav-link" href="<?= base_url ?>Clientes"><i class="fas fa-user me-2"></i> Clientes</a>
                     </div>
                 </div>
             </nav>
