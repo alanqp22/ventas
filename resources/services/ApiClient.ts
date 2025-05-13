@@ -46,6 +46,7 @@ class ApiClient {
       return result;
     } catch (error) {
       console.error(`[${method}] ${endpoint} →`, (error as any).message);
+
       throw error;
     }
   }
