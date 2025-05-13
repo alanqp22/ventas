@@ -13,6 +13,34 @@ class Cajas extends Controller
     $this->views->getView($this, "index", array('resources' => $resources));
   }
 
+  public function listar()
+  {
+    $data = $this->model->getCajas();
+    for ($i = 0; $i < count($data); $i++) {
+      $id = (int)$data[$i]["id_caja"];
+      if ($data[$i]["caja_estado"] == 1) {
+        $data[$i]["estado"] = '<span class="badge text-bg-primary">Activo</span>';
+        $data[$i]["acciones"] = <<<HTML
+          <button class="btn btn-primary" data-action="edit" data-id="$id">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="btn btn-danger" data-action="delete" data-id="$id">
+            <i class="fas fa-trash"></i>
+          </button>
+        HTML;
+      } else {
+        $data[$i]["estado"] = '<span class="badge text-bg-danger">Inactivo</span>';
+        $data[$i]["acciones"] = '';
+        $data[$i]["acciones"] = <<<HTML
+          <button class="btn btn-success" data-action="restore" data-id="$id">
+            <i class="fas fa-trash-can-arrow-up"></i>
+          </button>
+        HTML;
+      }
+    }
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
+  }
+
   public function editar(int $id)
   {
     header('Content-Type: application/json; charset=utf-8');
@@ -69,33 +97,6 @@ class Cajas extends Controller
     }
   }
 
-  public function listar()
-  {
-    $data = $this->model->getCajas();
-    for ($i = 0; $i < count($data); $i++) {
-      $id = (int)$data[$i]["id_caja"];
-      if ($data[$i]["caja_estado"] == 1) {
-        $data[$i]["estado"] = '<span class="badge text-bg-primary">Activo</span>';
-        $data[$i]["acciones"] = <<<HTML
-          <button class="btn btn-primary" data-action="edit" data-id="$id">
-            <i class="fas fa-edit"></i>
-          </button>
-          <button class="btn btn-danger" data-action="delete" data-id="$id">
-            <i class="fas fa-trash"></i>
-          </button>
-        HTML;
-      } else {
-        $data[$i]["estado"] = '<span class="badge text-bg-danger">Inactivo</span>';
-        $data[$i]["acciones"] = '';
-        $data[$i]["acciones"] = <<<HTML
-          <button class="btn btn-success" data-action="restore" data-id="$id">
-            <i class="fas fa-trash-can-arrow-up"></i>
-          </button>
-        HTML;
-      }
-    }
-    echo json_encode($data, JSON_UNESCAPED_UNICODE);
-  }
 
   public function actualizar(int $id_caja)
   {

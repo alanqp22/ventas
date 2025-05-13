@@ -13,20 +13,13 @@ const apiClient = new ApiClient(base_url);
 let tbl_cajas: MyTable;
 
 // Elementos DOM del modal
-const modalNewCaja = document.getElementById("mdl_new_user") as HTMLElement;
+const modalNewCaja = document.getElementById("mdl_new_caja") as HTMLElement;
 const modalTitle = document.getElementById("modalTitle")!;
 const btnRegistrar = document.getElementById("btnRegistrarCaja")!;
 let frmRegistrarCaja = document.getElementById(
   "frmRegistrarCaja"
 ) as HTMLFormElement;
-const nick = document.getElementById("nick") as HTMLInputElement;
 const name = document.getElementById("nombre") as HTMLInputElement;
-const clave = document.getElementById("clave") as HTMLInputElement;
-const confirm_clave = document.getElementById(
-  "confirm_clave"
-) as HTMLInputElement;
-const divClave = document.getElementById("divClave")!;
-const id_caja = document.getElementById("id_caja") as HTMLInputElement;
 
 // botón para abrir el modal
 const btnNewCaja = document.getElementById("btnNewCaja")!;
@@ -47,7 +40,6 @@ async function main() {
   );
   btnNewCaja?.addEventListener("click", () => {
     myModal.setSelectedID(null);
-    myModal.showFields(divClave);
     myModal.show();
   });
 
@@ -61,7 +53,7 @@ async function main() {
 
 function restoreCaja(id: string) {
   MyAlert.alertWarningDialog(
-    "¿Está seguro de que desea restaurar este usuario?",
+    "¿Está seguro de que desea restaurar esta caja?",
     "",
     "Sí, restaurar",
     () => {
@@ -69,7 +61,7 @@ function restoreCaja(id: string) {
         .restore("Cajas/restaurar/", id)
         .then((resp) => {
           if (resp.status == "ok") {
-            MyAlert.alertSuccess("Usuario restaurado con éxito");
+            MyAlert.alertSuccess("Caja restaurada con éxito");
             reloadLayout();
           }
         })
@@ -82,7 +74,7 @@ function restoreCaja(id: string) {
 
 function deleteCaja(id: string) {
   MyAlert.alertWarningDialog(
-    "¿Está seguro de que desea eliminar este usuario?",
+    "¿Está seguro de que desea eliminar esta caja?",
     "No podrá revertir esta acción",
     "Sí, eliminar",
     () => {
@@ -90,7 +82,7 @@ function deleteCaja(id: string) {
         .delete("Cajas/eliminar/", id)
         .then((resp) => {
           if (resp.status == "ok") {
-            MyAlert.alertSuccess("Usuario eliminado con éxito");
+            MyAlert.alertSuccess("Caja eliminada con éxito");
             reloadLayout();
           }
         })
@@ -102,16 +94,13 @@ function deleteCaja(id: string) {
 }
 
 function editCaja(id: string) {
-  myModal.setTitle("Editar Usuario");
-  myModal.setBtnDone("Actualizar Usuario");
-  myModal.hideFields(divClave);
+  myModal.setTitle("Editar Caja");
+  myModal.setBtnDone("Actualizar Caja");
 
   apiClient
     .getById("Cajas/editar/", id)
     .then((resp) => {
-      nick.value = resp.nick;
       name.value = resp.nombre;
-      id_caja.value = resp.id_caja;
     })
     .catch((error) => {
       MyAlert.alertError(getErrorMessage(error));
@@ -125,21 +114,17 @@ async function registerCaja(id: string | null) {
     return;
   }
 
-  if (!validateFields([nick, name, clave, confirm_clave, id_caja])) {
+  if (!validateFields([name])) {
     MyAlert.alertWarning("Todos los campos son obligatorios");
     return;
   }
 
   try {
     const resp = await apiClient.create("Cajas/registrar", {
-      nick: nick.value,
       nombre: name.value,
-      clave: clave.value,
-      confirm_clave: confirm_clave.value,
-      id_caja: id_caja.value,
     });
     if (resp.status == "ok") {
-      MyAlert.alertSuccess("Usuario registrado con éxito");
+      MyAlert.alertSuccess("Caja registrada con éxito");
       reloadLayout();
     }
   } catch (error) {
@@ -148,18 +133,16 @@ async function registerCaja(id: string | null) {
 }
 
 async function updateCaja(id: string): Promise<void> {
-  if (!validateFields([nick, name, id_caja])) {
+  if (!validateFields([name])) {
     MyAlert.alertWarning("Todos los campos son obligatorios");
     return;
   }
   try {
     const resp = await apiClient.update("Cajas/actualizar/", id, {
-      nick: nick.value,
       nombre: name.value,
-      id_caja: id_caja.value,
     });
     if (resp.status == "ok") {
-      MyAlert.alertSuccess("Usuario actualizado con éxito");
+      MyAlert.alertSuccess("Caja actualizada con éxito");
       reloadLayout();
     }
   } catch (error) {

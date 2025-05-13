@@ -39,6 +39,7 @@ class Usuarios extends Controller
         HTML;
       }
     }
+
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
   }
 

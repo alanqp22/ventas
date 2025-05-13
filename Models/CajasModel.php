@@ -48,7 +48,7 @@ class CajasModel extends Query
 
   public function getCajas()
   {
-    $sql = "select * from caja;";
+    $sql = "select * from cajas;";
     $data = $this->selectAll($sql);
     return $data;
   }
