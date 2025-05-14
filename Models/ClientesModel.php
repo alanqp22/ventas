@@ -10,26 +10,14 @@ class ClientesModel extends Query
     {
         $sql = "update clientes set cliente_estado=1 where id_cliente=?;";
         $datos = array($id_cliente);
-        $data = $this->save($sql, $datos);
-        if ($data == 1) {
-            $res = "ok";
-        } else {
-            $res = "error";
-        }
-        return $res;
+        return $this->doQuery($sql, $datos);
     }
 
     public function eliminarCliente(int $id_cliente)
     {
         $sql = "update clientes set cliente_estado=0 where id_cliente=?;";
         $datos = array($id_cliente);
-        $data = $this->save($sql, $datos);
-        if ($data == 1) {
-            $res = "ok";
-        } else {
-            $res = "error";
-        }
-        return $res;
+        return $this->doQuery($sql, $datos);
     }
 
     public function verificarCliente(string $documentoid)
@@ -57,21 +45,19 @@ class ClientesModel extends Query
     {
         $sql = "insert into clientes (documentoid, complementoid, razon_social, cliente_email) values (?,?,?,?);";
         $datos = array($documentoid, $complementoid, $razon_social, $cliente_email);
-        $data = $this->save($sql, $datos);
-        if ($data == 1) {
-            $res = "ok";
-        } else {
-            $res = "error";
-        }
-        return $res;
+        return $this->doQuery($sql, $datos);
     }
 
     public function actualizarCliente(int $id_cliente, string $razon_social, string $documentoid, string $complementoid, string $cliente_email)
     {
         $sql = "update clientes set documentoid=?, complementoid=?, razon_social=?, cliente_email=? where id_cliente=?;";
         $datos = array($documentoid, $complementoid, $razon_social, $cliente_email, $id_cliente);
-        $data = $this->save($sql, $datos);
+        return $this->doQuery($sql, $datos);
+    }
 
+    private function doQuery(string $sql, array $datos = [])
+    {
+        $data = $this->save($sql, $datos);
         if ($data == 1) {
             $res = "ok";
         } else {

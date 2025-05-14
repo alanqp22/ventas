@@ -13,7 +13,7 @@ include "Views/Templates/header.php";
         <tr>
             <th></th>
             <th>Razon Social</th>
-            <th>Documento</th>
+            <th>NIT/CI/CEX</th>
             <th>Complemento</th>
             <th>Correo</th>
             <th>Estado</th>
@@ -41,18 +41,18 @@ include "Views/Templates/header.php";
                     </div>
                     <div class="row mb-3">
                         <div class="col-8">
-                            <label for="documentoid" class="form-label">Documento/NIT</label>
+                            <label for="documentoid" class="form-label">NIT/CI/CEX</label>
                             <input type="text" name="documentoid" id="documentoid" class="form-control" maxlength="50" required>
                         </div>
                         <div class="col-4">
                             <label for="complementoid" class="form-label">Complemento</label>
-                            <input type="text" name="complementoid" id="complementoid" class="form-control" maxlength="50" required>
+                            <input type="text" name="complementoid" id="complementoid" class="form-control" maxlength="50">
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
                             <label for="correo" class="form-label">Correo Electrónico</label>
-                            <input type="email" name="correo" id="correo" class="form-control" maxlength="50" required>
+                            <input type="email" name="correo" id="correo" class="form-control" maxlength="50">
                         </div>
                     </div>
                 </div>

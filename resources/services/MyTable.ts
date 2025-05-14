@@ -33,6 +33,10 @@ class MyTable {
           orderable: false,
           targets: 0,
         },
+        {
+          targets: "_all",
+          className: "dt-left",
+        },
       ],
     });
 

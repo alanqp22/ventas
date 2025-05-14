@@ -18,9 +18,17 @@ class Clientes extends Controller
         $data = $this->model->getClientes();
         for ($i = 0; $i < count($data); $i++) {
             $id = (int)$data[$i]["id_cliente"];
-            if ($data[$i]["cliente_estado"] == 1) {
-                $data[$i]["estado"] = '<span class="badge text-bg-primary">Activo</span>';
-                $data[$i]["acciones"] = <<<HTML
+            $data[$i]["estado"] = $this->getEstadoBadge($data[$i]["cliente_estado"]);
+            $data[$i]["acciones"] = $this->getActionButtons($data[$i]["cliente_estado"], $id);
+            $data[$i]["cliente_email"] = htmlspecialchars($data[$i]["cliente_email"]);
+        }
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    }
+
+    private function getActionButtons($estado, $id)
+    {
+        if ($estado == 1) {
+            return <<<HTML
           <button class="btn btn-primary" data-action="edit" data-id="$id">
             <i class="fas fa-edit"></i>
           </button>
@@ -28,17 +36,21 @@ class Clientes extends Controller
             <i class="fas fa-trash"></i>
           </button>
         HTML;
-            } else {
-                $data[$i]["estado"] = '<span class="badge text-bg-danger">Inactivo</span>';
-                $data[$i]["acciones"] = '';
-                $data[$i]["acciones"] = <<<HTML
+        } else {
+            return <<<HTML
           <button class="btn btn-success" data-action="restore" data-id="$id">
             <i class="fas fa-trash-can-arrow-up"></i>
           </button>
         HTML;
-            }
         }
-        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    }
+
+    private function getEstadoBadge($estado)
+    {
+        return $estado == 1 ?
+            '<span class="badge text-bg-primary">Activo</span>'
+            :
+            '<span class="badge text-bg-danger">Inactivo</span>';
     }
 
     public function editar(int $id)
@@ -105,7 +117,7 @@ class Clientes extends Controller
             header('Content-Type: application/json; charset=utf-8');
 
             $input = json_decode(file_get_contents("php://input"), true);
-            $required = ['razon_social', 'documentoid', 'complementoid', 'cliente_email'];
+            $required = ['razon_social', 'documentoid'];
 
             foreach ($required as $field) {
                 if (empty($input[$field])) {
@@ -149,7 +161,7 @@ class Clientes extends Controller
         header('Content-Type: application/json; charset=utf-8');
 
         $input = json_decode(file_get_contents("php://input"), true);
-        $required = ['razon_social', 'documentoid', 'complementoid', 'cliente_email'];
+        $required = ['razon_social', 'documentoid'];
 
         foreach ($required as $field) {
             if (empty($input[$field])) {

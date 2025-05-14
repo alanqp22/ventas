@@ -127,8 +127,8 @@ async function registerCliente(id: string | null) {
     return;
   }
 
-  if (!validateFields([nombre])) {
-    MyAlert.alertWarning("Todos los campos son obligatorios");
+  if (!validateFields([nombre, documentoid])) {
+    MyAlert.alertWarning("Los campos Razon Social y ID/NIT son obligatorios");
     return;
   }
 
@@ -149,8 +149,8 @@ async function registerCliente(id: string | null) {
 }
 
 async function updateCliente(id: string): Promise<void> {
-  if (!validateFields([nombre])) {
-    MyAlert.alertWarning("Todos los campos son obligatorios");
+  if (!validateFields([nombre, documentoid])) {
+    MyAlert.alertWarning("Los campos Razon Social y ID/NIT son obligatorios");
     return;
   }
   try {

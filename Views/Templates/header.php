@@ -22,7 +22,18 @@ require_once __DIR__ . "/Vite.php";
     <?php
     vite($params['resources']); // Usuarios/app, Cajas/app, etc. 
     ?>
-
+    <style>
+        table.dataTable th.dt-type-numeric div.dt-column-header,
+        table.dataTable th.dt-type-numeric div.dt-column-footer,
+        table.dataTable th.dt-type-date div.dt-column-header,
+        table.dataTable th.dt-type-date div.dt-column-footer,
+        table.dataTable td.dt-type-numeric div.dt-column-header,
+        table.dataTable td.dt-type-numeric div.dt-column-footer,
+        table.dataTable td.dt-type-date div.dt-column-header,
+        table.dataTable td.dt-type-date div.dt-column-footer {
+            flex-direction: row !important;
+        }
+    </style>
 </head>
 
 <body class="sb-nav-fixed">
@@ -70,7 +81,7 @@ require_once __DIR__ . "/Vite.php";
                                 <a class="nav-link" href="<?= base_url ?>Cajas"><i class="fas fa-box me-2"></i> Cajas</a>
                             </nav>
                         </div>
-                        <a class="nav-link" href="<?= base_url ?>Clientes"><i class="fas fa-user me-2"></i> Clientes</a>
+                        <a class="nav-link" href="<?= base_url ?>Clientes"><i class="fas fa-users me-2"></i> Clientes</a>
                     </div>
                 </div>
             </nav>
