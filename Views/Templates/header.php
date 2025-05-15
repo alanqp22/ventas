@@ -79,6 +79,8 @@ require_once __DIR__ . "/Vite.php";
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="<?= base_url ?>Usuarios"><i class="fas fa-user me-2"></i> Usuarios</a>
                                 <a class="nav-link" href="<?= base_url ?>Cajas"><i class="fas fa-box me-2"></i> Cajas</a>
+                                <a class="nav-link" href="<?= base_url ?>Categorias"><i class="fas fa-rectangle-list me-2"></i> Categorias</a>
+                                <a class="nav-link" href="<?= base_url ?>Medidas"><i class="fas fa-box me-2"></i> Medidas</a>
                             </nav>
                         </div>
                         <a class="nav-link" href="<?= base_url ?>Clientes"><i class="fas fa-users me-2"></i> Clientes</a>
