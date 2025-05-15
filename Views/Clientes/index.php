@@ -6,7 +6,7 @@ include "Views/Templates/header.php";
     <li class="breadcrumb-item active">Clientes</li>
 </ol>
 <div class="div">
-    <button class="btn btn-primary" type="button" id="btnNewCliente">Nueva Cliente</button>
+    <button class="btn btn-primary" type="button" id="btnNewCliente">Nuevo Cliente</button>
 </div>
 <table class="table" id="tblClientes">
     <thead>

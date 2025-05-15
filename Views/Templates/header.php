@@ -84,6 +84,7 @@ require_once __DIR__ . "/Vite.php";
                             </nav>
                         </div>
                         <a class="nav-link" href="<?= base_url ?>Clientes"><i class="fas fa-users me-2"></i> Clientes</a>
+                        <a class="nav-link" href="<?= base_url ?>Productos"><i class="fas fa-gift me-2"></i> Productos</a>
                     </div>
                 </div>
             </nav>

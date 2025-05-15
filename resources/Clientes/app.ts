@@ -71,7 +71,7 @@ function restoreCliente(id: string) {
         .restore("Clientes/restaurar/", id)
         .then((resp) => {
           if (resp.status == "ok") {
-            MyAlert.alertSuccess("Cliente restaurada con éxito");
+            MyAlert.alertSuccess("Cliente restaurado con éxito");
             reloadLayout();
           }
         })
@@ -92,7 +92,7 @@ function deleteCliente(id: string) {
         .delete("Clientes/eliminar/", id)
         .then((resp) => {
           if (resp.status == "ok") {
-            MyAlert.alertSuccess("Cliente eliminada con éxito");
+            MyAlert.alertSuccess("Cliente eliminado con éxito");
             reloadLayout();
           }
         })
