@@ -85,6 +85,18 @@ require_once __DIR__ . "/Vite.php";
                         </div>
                         <a class="nav-link" href="<?= base_url ?>Clientes"><i class="fas fa-users me-2"></i> Clientes</a>
                         <a class="nav-link" href="<?= base_url ?>Productos"><i class="fas fa-gift me-2"></i> Productos</a>
+
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePedidos" aria-expanded="false" aria-controls="collapsePedidos">
+                            <div class="sb-nav-link-icon"><i class="fas fa-shop"></i></div>
+                            Pedidos
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapsePedidos" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                                <a class="nav-link" href="<?= base_url ?>Pedidos/nuevo_pedido"><i class="fas fa-cart-shopping me-2"></i> Pedido nuevo</a>
+                                <a class="nav-link" href="<?= base_url ?>Pedidos"><i class="fas fa-clipboard-list me-2"></i> Lista de pedidos</a>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </nav>
