@@ -59,6 +59,10 @@ class ApiClient {
     return this.request(`${resource}${id}`, "GET", null, headers);
   }
 
+  public getByIdPost(resource: string, data: any, headers = {}) {
+    return this.request(`${resource}`, "POST", data, headers);
+  }
+
   public async create(resource: string, data: any, headers = {}) {
     return await this.request(`${resource}`, "POST", data, headers);
   }

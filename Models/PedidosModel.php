@@ -10,7 +10,7 @@ class PedidosModel extends Query
   public function buscarCliente(string $documentoid)
   {
     $sql = "SELECT * FROM clientes WHERE documentoid = '$documentoid'";
-    $data = $this->selectAll($sql);
+    $data = $this->select($sql);
     return $data;
   }
 }
