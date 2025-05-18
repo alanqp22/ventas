@@ -26,34 +26,6 @@ class Productos extends Controller
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 
-    private function getActionButtons($estado, $id)
-    {
-        if ($estado == 1) {
-            return <<<HTML
-          <button class="btn btn-primary" data-action="edit" data-id="$id">
-            <i class="fas fa-edit"></i>
-          </button>
-          <button class="btn btn-danger" data-action="delete" data-id="$id">
-            <i class="fas fa-trash"></i>
-          </button>
-        HTML;
-        } else {
-            return <<<HTML
-          <button class="btn btn-success" data-action="restore" data-id="$id">
-            <i class="fas fa-trash-can-arrow-up"></i>
-          </button>
-        HTML;
-        }
-    }
-
-    private function getEstadoBadge($estado)
-    {
-        return $estado == 1 ?
-            '<span class="badge text-bg-primary">Activo</span>'
-            :
-            '<span class="badge text-bg-danger">Inactivo</span>';
-    }
-
     public function editar(int $id)
     {
         header('Content-Type: application/json; charset=utf-8');
@@ -118,7 +90,7 @@ class Productos extends Controller
             header('Content-Type: application/json; charset=utf-8');
 
             $input = json_decode(file_get_contents("php://input"), true);
-            $required = ['nombre_producto', 'codigo'];
+            $required = ['nombre_producto', 'codigo', 'id_categoria', 'id_medida', 'precio_venta', 'cantidad'];
 
             foreach ($required as $field) {
                 if (empty($input[$field])) {
@@ -131,11 +103,11 @@ class Productos extends Controller
 
             $nombre_producto = $input['nombre_producto'];
             $codigo = $input['codigo'];
-            $costo_compra = $input['costo_compra'];
-            $precio_venta = $input['precio_venta'];
-            $cantidad = $input['cantidad'];
             $id_categoria = $input['id_categoria'];
             $id_medida = $input['id_medida'];
+            $costo_compra = !empty($input['costo_compra']) ? $input['costo_compra'] : 0;
+            $precio_venta = $input['precio_venta'];
+            $cantidad = $input['cantidad'];
 
             if (!$this->model->getProductoById($id_producto)) {
                 http_response_code(409);
@@ -164,7 +136,7 @@ class Productos extends Controller
         header('Content-Type: application/json; charset=utf-8');
 
         $input = json_decode(file_get_contents("php://input"), true);
-        $required = ['nombre_producto', 'codigo'];
+        $required = ['nombre_producto', 'codigo', 'id_categoria', 'id_medida', 'precio_venta', 'cantidad'];
 
         foreach ($required as $field) {
             if (empty($input[$field])) {
@@ -176,11 +148,11 @@ class Productos extends Controller
 
         $nombre_producto = $input['nombre_producto'];
         $codigo = $input['codigo'];
-        $costo_compra = $input['costo_compra'];
-        $precio_venta = $input['precio_venta'];
-        $cantidad = $input['cantidad'];
         $id_categoria = $input['id_categoria'];
         $id_medida = $input['id_medida'];
+        $costo_compra = !empty($input['costo_compra']) ? $input['costo_compra'] : 0;
+        $precio_venta = $input['precio_venta'];
+        $cantidad = $input['cantidad'];
 
         try {
             if ($this->model->verificarProducto($codigo)) {

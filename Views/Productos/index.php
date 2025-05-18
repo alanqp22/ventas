@@ -17,7 +17,7 @@ include "Views/Templates/header.php";
             <th>Costo</th>
             <th>Precio venta</th>
             <th>Cantidad</th>
-            <th>Unidad de medida</th>
+            <th>Unidad</th>
             <th>Categoría</th>
             <th>Estado</th>
             <th>Acciones</th>
@@ -48,21 +48,21 @@ include "Views/Templates/header.php";
                     <div class="row mb-3">
                         <div class="col-4">
                             <label for="costo_compra" class="form-label">Costo de compra</label>
-                            <input type="number" step="0.1" name="costo_compra" id="costo_compra" class="form-control" maxlength="50">
+                            <input type="number" step="0.1" name="costo_compra" id="costo_compra" class="form-control" maxlength="50" required>
                         </div>
                         <div class="col-4">
                             <label for="precio_venta" class="form-label">Precio de venta</label>
-                            <input type="number" step="0.1" name="precio_venta" id="precio_venta" class="form-control" maxlength="50">
+                            <input type="number" step="0.1" name="precio_venta" id="precio_venta" class="form-control" maxlength="50" required>
                         </div>
                         <div class="col-4">
                             <label for="cantidad" class="form-label">Cantidad</label>
-                            <input type="number" step="1" min="0" name="cantidad" id="cantidad" class="form-control" maxlength="50">
+                            <input type="number" step="1" min="0" name="cantidad" id="cantidad" class="form-control" maxlength="50" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-6">
                             <label for="id_categoria">Categoría</label>
-                            <select id="id_categoria" name="id_categoria" class="form-select" aria-label="Selección de caja">
+                            <select id="id_categoria" name="id_categoria" class="form-select" aria-label="Selección de caja" required>
                                 <option value="" selected>Selecciona una categoria</option>
                                 <?php
                                 foreach ($params['categorias'] as $categoria) {
@@ -76,7 +76,7 @@ include "Views/Templates/header.php";
                         </div>
                         <div class="col-6">
                             <label for="id_medida">Medida</label>
-                            <select id="id_medida" name="id_medida" class="form-select" aria-label="Selección de caja">
+                            <select id="id_medida" name="id_medida" class="form-select" aria-label="Selección de caja" required>
                                 <option value="" selected>Selecciona una medida</option>
                                 <?php
                                 foreach ($params['medidas'] as $medida) {

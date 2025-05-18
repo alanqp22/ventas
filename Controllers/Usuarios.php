@@ -19,25 +19,8 @@ class Usuarios extends Controller
     $data = $this->model->getUsuarios();
     for ($i = 0; $i < count($data); $i++) {
       $id = (int)$data[$i]["id_usuario"];
-      if ($data[$i]["usuario_estado"] == 1) {
-        $data[$i]["estado"] = '<span class="badge text-bg-primary">Activo</span>';
-        $data[$i]["acciones"] = <<<HTML
-          <button class="btn btn-primary" data-action="edit" data-id="$id">
-            <i class="fas fa-edit"></i>
-          </button>
-          <button class="btn btn-danger" data-action="delete" data-id="$id">
-            <i class="fas fa-trash"></i>
-          </button>
-        HTML;
-      } else {
-        $data[$i]["estado"] = '<span class="badge text-bg-danger">Inactivo</span>';
-        $data[$i]["acciones"] = '';
-        $data[$i]["acciones"] = <<<HTML
-          <button class="btn btn-success" data-action="restore" data-id="$id">
-            <i class="fas fa-trash-can-arrow-up"></i>
-          </button>
-        HTML;
-      }
+      $data[$i]["estado"] = $this->getEstadoBadge($data[$i]["usuario_estado"]);
+      $data[$i]["acciones"] = $this->getActionButtons($data[$i]["usuario_estado"], $id);
     }
 
     echo json_encode($data, JSON_UNESCAPED_UNICODE);

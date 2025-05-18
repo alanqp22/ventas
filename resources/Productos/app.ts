@@ -48,7 +48,7 @@ async function main() {
     "costo_compra",
     "precio_venta",
     "cantidad",
-    "descripcion_medida",
+    "descripcion_corta",
     "nombre_categoria",
     "estado",
     "acciones",
@@ -148,10 +148,18 @@ async function registerProducto(id: string | null) {
     return;
   }
 
-  if (!validateFields([nombre_producto, codigo])) {
-    MyAlert.alertWarning(
-      "Los campos Nombre de producto y código son obligatorios"
-    );
+  if (
+    !validateFields([
+      nombre_producto,
+      codigo,
+      precio_venta,
+      cantidad,
+      id_categoria,
+      id_medida,
+      costo_compra,
+    ])
+  ) {
+    MyAlert.alertWarning("Todos los campos son obligatorios");
     return;
   }
 
@@ -175,10 +183,18 @@ async function registerProducto(id: string | null) {
 }
 
 async function updateProducto(id: string): Promise<void> {
-  if (!validateFields([nombre_producto, codigo])) {
-    MyAlert.alertWarning(
-      "Los campos Nombre de producto y código son obligatorios"
-    );
+  if (
+    !validateFields([
+      nombre_producto,
+      codigo,
+      precio_venta,
+      cantidad,
+      id_categoria,
+      id_medida,
+      costo_compra,
+    ])
+  ) {
+    MyAlert.alertWarning("Todos los campos son obligatorios");
     return;
   }
   try {

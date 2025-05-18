@@ -25,34 +25,6 @@ class Clientes extends Controller
         echo json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 
-    private function getActionButtons($estado, $id)
-    {
-        if ($estado == 1) {
-            return <<<HTML
-          <button class="btn btn-primary" data-action="edit" data-id="$id">
-            <i class="fas fa-edit"></i>
-          </button>
-          <button class="btn btn-danger" data-action="delete" data-id="$id">
-            <i class="fas fa-trash"></i>
-          </button>
-        HTML;
-        } else {
-            return <<<HTML
-          <button class="btn btn-success" data-action="restore" data-id="$id">
-            <i class="fas fa-trash-can-arrow-up"></i>
-          </button>
-        HTML;
-        }
-    }
-
-    private function getEstadoBadge($estado)
-    {
-        return $estado == 1 ?
-            '<span class="badge text-bg-primary">Activo</span>'
-            :
-            '<span class="badge text-bg-danger">Inactivo</span>';
-    }
-
     public function editar(int $id)
     {
         header('Content-Type: application/json; charset=utf-8');

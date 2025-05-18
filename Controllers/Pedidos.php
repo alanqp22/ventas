@@ -36,6 +36,26 @@ class Pedidos extends Controller
     return;
   }
 
+  public function buscarProducto()
+  {
+    if (!$this->validateMethod("POST")) return;
+    header('Content-Type: application/json; charset=utf-8');
+    try {
+      $input = json_decode(file_get_contents("php://input"), true);
+      $codigo = $input['codigo'];
+      $data = $this->model->buscarProducto($codigo);
+      if (!$data) {
+        http_response_code(409);
+        echo json_encode(['message' => 'El producto no existe o no hay disponibilidad'], JSON_UNESCAPED_UNICODE);
+        return;
+      }
+      echo json_encode($data, JSON_UNESCAPED_UNICODE);
+      return;
+    } catch (Exception $e) {
+      echo json_encode($e->getMessage(), JSON_UNESCAPED_UNICODE);
+    }
+  }
+
   private function validateMethod(string $expectedMethod)
   {
     if ($_SERVER['REQUEST_METHOD'] != $expectedMethod) {
